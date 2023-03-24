@@ -6,6 +6,10 @@ const dotenv = require("dotenv");
 const ejs = require('ejs');
 const cors = require("cors");
 const mongoose = require("mongoose");
+const passport = require('passport');
+const User = require('./models/userModel');
+const initializePassport = require('./passport-config');
+const login = require('./routes/authRoutes');
 
 dotenv.config();
 
@@ -22,39 +26,15 @@ app.use(express.static('public')); // for serving static files
 
 // Connect to mongoDB
 mongoose.connect(
-    process.env.DB_CONNECTION, {
-        useUnifiedTopology: true,
-        useNewUrlParser: true
-    },
+    process.env.DB_CONNECTION_URI,
     () => console.log("Connected to DB")
 );
 
-// Get the login page and render it
-app.get('/login', (req, res) => {
-    res.render('login');
-  });
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-// Get the users from the database and render the users page
-app.get('/users', checkRole('admin'), (req, res) => {
-  db.collection('users').find().toArray((err, users) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Error retrieving users from the database.');
-      return;
-    }
-    res.render('users', { users, admin: req.user.role === 'admin' });
-  });
-});  
+app.use(passport.initialize());
+initializePassport(passport);
 
-// Verifies that the checkedRole is the same as the user's role
-function checkRole(checkedRole) {
-    return (req, res, next) => {
-        if (req.user.role === checkedRole) {
-            next();
-        } else {
-            res.status(401).send('You are not authorized to view this page.');
-        }
-    };
-}
-
+app.use('/', login);
 app.listen(PORT, () => console.log(`Running server on port: ${PORT}`));

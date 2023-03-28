@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Users</title>
-  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <h1>All Users</h1>
@@ -22,19 +22,13 @@
         <tr>
           <td><%= user._id %></td>
           <td><%= user.username %></td>
-          <td><%= user.role %></td>
+          <td><%= user.roles[0].name %></td>
           <td>
-            <% if (admin) { %>
-              <form action="/addRole" method="POST">
-                <input type="hidden" name="userId" value="<%= user._id %>">
-                <select name="role">
-                  <option value="admin">Admin</option>
-                  <option value="residential">Residential</option>
-                  <option value="business">Business</option>
-                </select>
-                <button type="submit">Add Role</button>
+          
+              <form action="/addUser" method="POST">
+                <button type="submit">Add User</button>
               </form>
-            <% } %>
+        
           </td>
         </tr>
       <% }) %>

@@ -8,13 +8,15 @@
 </head>
 <body>
   <h1>All Users</h1>
+  <form action="/addUser" method="POST">
+    <button type="submit">Add User</button>
+  </form>
   <table>
     <thead>
       <tr>
         <th>ID</th>
         <th>Username</th>
         <th>Role</th>
-        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -23,13 +25,6 @@
           <td><%= user._id %></td>
           <td><%= user.username %></td>
           <td><%= user.roles[0].name %></td>
-          <td>
-          
-              <form action="/addUser" method="POST">
-                <button type="submit">Add User</button>
-              </form>
-        
-          </td>
         </tr>
       <% }) %>
     </tbody>

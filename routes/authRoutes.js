@@ -29,13 +29,19 @@ router.post('/login', async (req, res) => {
     return res.status(500).json({ message: 'An error occurred during authentication.' });
   }
   if (!user) {
+    await User.updateOne({ username: req.body.username }, { $inc: { badConnexions: 1 } });
     return res.status(401).json({ message: 'Incorrect username or password.' });
   }
 
   const validPassword = await bcrypt.compare(password, user.password);
   if (!validPassword) {
+    await User.updateOne({ username: req.body.username }, { $inc: { badConnexions: 1 } });
     return res.status(401).json({ message: 'Incorrect username or password.' });
   }
+  await User.updateOne({ username: req.body.username }, { $inc: { goodConnexions: 1 } });
+
+  user.lastLoginDate = new Date();
+  await user.save();
 
   const roleName = user.roles[0].name;
 

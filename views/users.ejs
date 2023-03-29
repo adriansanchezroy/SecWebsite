@@ -3,20 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Users</title>
+  <title>Utilisateurs</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <h1>All Users</h1>
+  <h1>Utilisateurs</h1>
   <form action="/addUser" method="POST">
-    <button type="submit">Add User</button>
+    <button type="submit">Créer</button>
   </form>
   <table>
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>Role</th>
+        <th>Identifiant</th>
+        <th>Utilisateur</th>
+        <th>Rôles</th>
+        <th>Bloqué</th>
+        <th>Mot de passe modifié</th>
+        <th>Dernière connexion</th>
+        <th>Login attempts</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -24,7 +29,26 @@
         <tr>
           <td><%= user._id %></td>
           <td><%= user.username %></td>
-          <td><%= user.roles[0].name %></td>
+          <td>
+            <% user.roles.forEach((role) => { %>
+              <%= role.name %><br>
+            <% }) %>
+          </td>
+          <td><%= user.blocked %></td>
+          <td><%= user.passModified %></td>
+          <td><%= user.lastLoginDate %></td>
+          <td>Good: <%= user.goodConnexions %> Bad: <%= user.badConnexions %></td>
+          <td>
+            <div class="dropdown">
+              <button class="dropbtn">Actions</button>
+              <div class="dropdown-content">
+                <a href="#">Ajouter rôle admin</a>
+                <a href="#">Ajouter rôle résidentiel</a>
+                <a href="#">Ajouter rôle affaire</a>
+                <a href="#">Réinitialiser mot de passe</a>
+              </div>
+            </div>
+          </td>
         </tr>
       <% }) %>
     </tbody>

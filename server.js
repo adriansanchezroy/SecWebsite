@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const PORT = 5000;
+const PORT = 3000;
 const AuthRoutes = require("./routes/authRoutes");
 const dotenv = require("dotenv");
 const ejs = require('ejs');
@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 dotenv.config();
 
 var corsOptions = {
-    origin: "http://localhost:5000"
+    origin: "http://localhost:3000"
   };
 
 app.set('view engine', 'ejs'); // set up ejs for templating 

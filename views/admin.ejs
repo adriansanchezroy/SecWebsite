@@ -13,8 +13,8 @@
 </head>
 <body>
 
-  <%- include('header') %>
-  
+    <%- include('header') %>
+    
   <br>
 
   <header>
@@ -24,30 +24,8 @@
   <form action="/addUser" method="POST">
     <button type="submit">Créer Utilisateurs</button>
   </form>
-  <!-- Add User Modal -->
-<div id="addUserModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <form id="addUserForm">
-      <h2>Add User</h2>
-      <label for="username">Username:</label>
-      <input type="text" id="username" name="username" required><br>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required><br>
-      <label for="confirmPassword">Confirm Password:</label>
-      <input type="password" id="confirmPassword" name="confirmPassword" required><br>
-      <label for="role">Role:</label>
-      <select id="role" name="role" required>
-        <option value="admin">Admin</option>
-        <option value="residential">Residential</option>
-        <option value="business">Business</option>
-      </select><br>
-      <button type="submit">Create User</button>
-    </form>
-  </div>
-</div>
-  <table>
-    <thead>
+  <table class="table table-striped table-bordered">
+    <thead class="thead-dark">
       <tr>
         <th>Identifiant</th>
         <th>Utilisateur</th>

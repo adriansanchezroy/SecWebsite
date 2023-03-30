@@ -1,17 +1,20 @@
+<!DOCTYPE html>
+
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tableau de bord</title>
-  <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-  <nav>
-    <ul>
-      <li><a href="/admin">Administration</a></li>
-      <li><a href="/users" id="view-users">Utilisateurs</a></li>
-    </ul>
-  </nav>
+
+  <head>
+    <title>Tableau de bord</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/styles.css">
+
+  </head>
+  <body>
+  
+    <%- include('header') %>
+
+  <br>
+
   <header>
     <h1>Tableau de bord</h1>
   </header>
@@ -25,5 +28,6 @@
   </main>
   <footer>
   </footer>
+  <%- include('footer') %>
 </body>
 </html>

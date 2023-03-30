@@ -17,6 +17,7 @@ router.get('/dashboard', (req, res) => {
 });
 
 
+
 // Post the login form and authenticate the user
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
@@ -63,6 +64,45 @@ router.get('/users', authenticateToken, async (req, res) => {
    
     const users = await User.find().populate("roles");
     res.render('users', { users});
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error retrieving users from the database.');
+  }
+});
+
+// Get the users from the database and render the users page
+router.get('/clients/business', authenticateToken, async (req, res) => {
+  try {
+   
+    const users = await User.find().populate("roles");
+    res.render('usersA', { users});
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error retrieving users from the database.');
+  }
+});
+
+// Get the users from the database and render the users page
+router.get('/clients/residential', authenticateToken, async (req, res) => {
+  try {
+   
+    const users = await User.find().populate("roles");
+    res.render('usersR', { users});
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error retrieving users from the database.');
+  }
+});
+
+// Get the users from the database and render the users page
+router.get('/admin', authenticateToken, async (req, res) => {
+  try {
+   
+    const users = await User.find().populate("roles");
+    res.render('admin', { users});
     
   } catch (err) {
     console.error(err);

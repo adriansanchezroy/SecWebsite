@@ -54,12 +54,11 @@ router.post('/login', async (req, res) => {
   await user.save();
 
   const roles = user.roles;
-  console.log(roles);
 
   const payload = {
     id: user._id,
     username: user.username,
-    role: roles,
+    roles: roles,
   };
 
   const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
@@ -70,7 +69,7 @@ router.post('/login', async (req, res) => {
 // Get the users from the database and render the users page
 router.get('/users', authenticateToken, async (req, res) => {
   let username = '';
-  let role = '';
+  let roles = '';
   token = req.session.token;
   try {
     // Decode the token using the secret
@@ -78,14 +77,14 @@ router.get('/users', authenticateToken, async (req, res) => {
 
     // Access the relevant payload data (username, role)
     username = decoded.username;
-    role = decoded.role[0];
+    roles = decoded.roles[0];
 
   } catch (err) {
     // Handle the error (invalid token, expired token, etc.)
     res.status(401).send('Invalid or expired token');
   }
 
-  if (hasRole(role, 'admin')) { // Check if the user has the required admin role
+  if (hasRole(roles, 'admin')) { // Check if the user has the required admin role
   try {
     const users = await User.find();
     res.render('users', { users});
@@ -101,7 +100,7 @@ router.get('/users', authenticateToken, async (req, res) => {
 
 // Add a new user to the database
 router.post("/addUser", authenticateToken, async (req, res) => {
-  const { username, password, role } = req.body;
+  const { firstName, lastName, username, password, role } = req.body;
 
   // Validate and create the user
   try {
@@ -110,6 +109,8 @@ router.post("/addUser", authenticateToken, async (req, res) => {
     hashedPassword = await bcrypt.hash(hashedPassword, 10);
 
     const newUser = new User({
+      firstName,
+      lastName,
       username,
       password: hashedPassword,
       roles: role,

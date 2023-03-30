@@ -37,6 +37,16 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  firstName: {
+    type: String,
+    min: 2,
+    max: 255,
+  },
+  lastName: {
+    type: String,
+    min: 2,
+    max: 255,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);

@@ -5,6 +5,7 @@ const Role = require('../models/roleModel');
 const bcrypt = require('bcryptjs');
 const router = express.Router();
 const authenticateToken = require('../middleware/auth');
+const hasRole = require('../utils/hasRole');
 
 // Get the login page and render it
 router.get('/login', (req, res) => {
@@ -16,11 +17,9 @@ router.get('/dashboard', (req, res) => {
   res.render('dashboard');
 });
 
-
 // Post the login form and authenticate the user
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
-
   let user;
   try {
     user = await User.findOne({ username }).populate("roles");
@@ -35,10 +34,21 @@ router.post('/login', async (req, res) => {
 
   const validPassword = await bcrypt.compare(password, user.password);
   if (!validPassword) {
-    await User.updateOne({ username: req.body.username }, { $inc: { badConnexions: 1 } });
-    return res.status(401).json({ message: 'Incorrect username or password.' });
+    if(user.badConnexions >= 10){
+
+      await User.updateOne({ username: req.body.username }, { $set: { blocked: true } });
+      return res.status(401).json({ message: 'Too many attempts. Your account has been blocked.' });
+    
+    }else{
+
+      return res.status(401).json({ message: 'Incorrect username or password.' });
+    }
   }
-  await User.updateOne({ username: req.body.username }, { $inc: { goodConnexions: 1 } });
+
+  if (user.blocked) {
+    return res.status(401).json({ message: 'Your account has been blocked. Please contact admin.' });
+  }
+
 
   user.lastLoginDate = new Date();
   await user.save();
@@ -59,14 +69,33 @@ router.post('/login', async (req, res) => {
 
 // Get the users from the database and render the users page
 router.get('/users', authenticateToken, async (req, res) => {
+  let username = '';
+  let role = '';
+  token = req.session.token;
   try {
-   
-    const users = await User.find().populate("roles");
+    // Decode the token using the secret
+    const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+
+    // Access the relevant payload data (username, role)
+    username = decoded.username;
+    role = decoded.role[0];
+
+  } catch (err) {
+    // Handle the error (invalid token, expired token, etc.)
+    res.status(401).send('Invalid or expired token');
+  }
+
+  if (hasRole(role, 'admin')) { // Check if the user has the required admin role
+  try {
+    const users = await User.find();
     res.render('users', { users});
     
   } catch (err) {
     console.error(err);
     res.status(500).send('Error retrieving users from the database.');
+  }}
+  else{
+    res.status(403).send('Access denied. You do not have the required role.');
   }
 });
 

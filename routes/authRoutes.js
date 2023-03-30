@@ -43,12 +43,13 @@ router.post('/login', async (req, res) => {
   user.lastLoginDate = new Date();
   await user.save();
 
-  const roleName = user.roles[0].name;
+  const roles = user.roles;
+  console.log(roles);
 
   const payload = {
     id: user._id,
     username: user.username,
-    role: roleName,
+    role: roles,
   };
 
   const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
@@ -68,5 +69,30 @@ router.get('/users', authenticateToken, async (req, res) => {
     res.status(500).send('Error retrieving users from the database.');
   }
 });
+
+// Add a new user to the database
+router.post("/addUser", authenticateToken, async (req, res) => {
+  const { username, password, role } = req.body;
+
+  // Validate and create the user
+  try {
+    let hashedPassword = password;
+
+    hashedPassword = await bcrypt.hash(hashedPassword, 10);
+
+    const newUser = new User({
+      username,
+      password: hashedPassword,
+      roles: role,
+    });
+
+    await newUser.save();
+    res.status(200).json({ message: "User created successfully." });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ message: "An error occurred while creating the user." });
+  }
+});
+
 
 module.exports = router;

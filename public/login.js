@@ -1,12 +1,14 @@
 const loginForm = document.getElementById('login');
-
-  loginForm.addEventListener('submit', async (event) => {
+loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const formData = new FormData(loginForm);
+    const username = formData.get('username');
+    const password = formData.get('password');
+
     const data = {
-      username: formData.get('username'),
-      password: formData.get('password'),
+      username: username,
+      password: password,
     };
 
     try {

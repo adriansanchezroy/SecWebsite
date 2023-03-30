@@ -15,9 +15,9 @@ const userSchema = new mongoose.Schema({
   },
   roles: [
     {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Role"
-    }
+      type: String,
+      enum: ["admin", "residential", "business"],
+    },
   ],
   blocked: {
     type: Boolean,

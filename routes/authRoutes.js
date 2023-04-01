@@ -135,4 +135,43 @@ router.post("/addUser", authenticateToken, async (req, res) => {
 });
 
 
+router.post('/change-password', async (req, res) => {
+  const { oldPassword, newPassword, confirmNewPassword } = req.body;
+
+  const token = req.session.token;
+  const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+
+  console.log(decoded.username);
+
+  let user;
+  user = await User.findOne({decoded});
+  console.log(user.password);
+
+  const currentPassword = await bcrypt.hash(oldPassword, 10);
+  console.log(currentPassword);
+
+  const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+
+  if (!passwordMatch) {
+    return res.status(401).json({ error: 'Mot de passe incorrect.' });
+  }
+
+  if (newPassword !== confirmNewPassword) {
+    return res.status(400).json({ error: 'Les nouveaux mots de passe ne correspondent pas.' });
+  }
+
+  if (newPassword === oldPassword) {
+    return res.status(400).json({ error: 'Le nouveau mot de passe doit être différent de l\'ancien.' });
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  console.log(hashedPassword);
+  user.password = hashedPassword;
+  
+  await user.save();
+
+  // res.redirect('/login');
+});
+
+
 module.exports = router;

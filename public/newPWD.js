@@ -3,14 +3,15 @@ changePasswordForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const formData = new FormData(changePasswordForm);
-  const oldPassword = formData.get('old-password');
-  const newPassword = formData.get('new-password');
-  const confirmPassword = formData.get('confirm-password');
+  const oldPassword = formData.get('oldpassword');
+  const newPassword = formData.get('newpassword');
+  const confirmPassword = formData.get('confirmpassword');
 
   if (newPassword === confirmPassword) {
     const data = {
       oldPassword: oldPassword,
       newPassword: newPassword,
+      confirmPassword: confirmPassword,
     };
 
     try {

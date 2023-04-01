@@ -136,19 +136,17 @@ router.post("/addUser", authenticateToken, async (req, res) => {
 
 
 router.post('/change-password', async (req, res) => {
-  const { oldPassword, newPassword, confirmNewPassword } = req.body;
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
+  const confirmNewPassword = req.body.confirmPassword;
+
 
   const token = req.session.token;
   const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
-
-  console.log(decoded.username);
+  const username = decoded.username;
 
   let user;
-  user = await User.findOne({decoded});
-  console.log(user.password);
-
-  const currentPassword = await bcrypt.hash(oldPassword, 10);
-  console.log(currentPassword);
+  user = await User.findOne({username});
 
   const passwordMatch = await bcrypt.compare(oldPassword, user.password);
 
@@ -170,7 +168,6 @@ router.post('/change-password', async (req, res) => {
   
   await user.save();
 
-  // res.redirect('/login');
 });
 
 

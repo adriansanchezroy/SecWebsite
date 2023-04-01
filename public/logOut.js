@@ -1,18 +1,16 @@
-const logoutButton = document.getElementById('logout');
+const logoutButton = document.getElementById('logout-form');
 
 logoutButton.addEventListener('click', async () => {
   try {
     const response = await fetch('/logout', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      method: 'POST'
     });
 
     if (response.status === 200) {
+      document.cookie = 'session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
       window.location.href = '/login';
     } else {
-      alert('An error occurred while logging out');
+      alert('Logout failed');
     }
   } catch (error) {
     console.error('Error during logout:', error);

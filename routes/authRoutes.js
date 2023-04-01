@@ -178,7 +178,8 @@ router.post('/logout', (req, res) => {
       console.error('Error logging out:', err);
       res.status(500).send('Error logging out');
     } else {
-      res.sendStatus(200);
+      res.clearCookie('connect.sid');
+      res.redirect('/login');
     }
   });
 });

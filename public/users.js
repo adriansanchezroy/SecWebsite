@@ -24,6 +24,8 @@ window.onclick = (event) => {
 document.getElementById("addUserForm").addEventListener("submit", async (event) => {
   event.preventDefault();
 
+  const firstName = document.getElementById("firstName").value;
+  const lastName = document.getElementById("lastName").value;
   const username = document.getElementById("username").value;
   const password = document.getElementById("password").value;
   const confirmPassword = document.getElementById("confirmPassword").value;
@@ -41,6 +43,8 @@ document.getElementById("addUserForm").addEventListener("submit", async (event) 
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            firstName,
+            lastName,
             username,
             password,
             role,

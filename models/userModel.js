@@ -1,9 +1,6 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-
-
-
   username: {
     type: String,
     required: true,
@@ -19,11 +16,13 @@ const userSchema = new mongoose.Schema({
   roles: [
     {
       type: String,
+      required: true,
       enum: ["admin", "residential", "business"],
     },
   ],
   blocked: {
     type: Boolean,
+    required: true,
     default: false,
   },
   passModified: {
@@ -42,11 +41,13 @@ const userSchema = new mongoose.Schema({
   },
   firstName: {
     type: String,
+    required: true,
     min: 2,
     max: 255,
   },
   lastName: {
     type: String,
+    required: true,
     min: 2,
     max: 255,
   },

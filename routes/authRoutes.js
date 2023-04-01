@@ -134,7 +134,7 @@ router.post("/addUser", authenticateToken, async (req, res) => {
   }
 });
 
-
+// Change the password
 router.post('/change-password', async (req, res) => {
   const oldPassword = req.body.oldPassword;
   const newPassword = req.body.newPassword;
@@ -169,6 +169,20 @@ router.post('/change-password', async (req, res) => {
   await user.save();
 
 });
+
+
+// Log out
+router.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error logging out:', err);
+      res.status(500).send('Error logging out');
+    } else {
+      res.sendStatus(200);
+    }
+  });
+});
+
 
 
 module.exports = router;

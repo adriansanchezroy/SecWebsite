@@ -1,14 +1,39 @@
 
   <header>
     <nav class="navbar navbar-expand-sm bg-light navbar-light">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="">
             <img src="https://www.etsmtl.ca/getmedia/f6b1f0f3-c9d2-42b6-b25f-b9576b0295ba/Logo_ETS_TypoGrise_D_FR" alt="Logo" style="width:50%;">
           </a>
+          <ul class="navbar-nav mr-auto">
 
+          </ul>
 
-      <formHeader class="header" action="/logout" method="POST" id="logout-form">
+      <formHeader class="header form-inline" action="/logout" method="POST" id="logout-form">
         <decoBut type="submit">Se déconnecter</decoBut>
       </formHeader>
     </nav>
   </header>
+  
+  <header>
+    <nav class="navbar navbar-expand-sm bg-light navbar-light justify-content-right">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/dashboard"> Tableau de bord </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/admin"> Administration </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/clients/business"> Clients Affaires </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/clients/residential"> Clients Résidentiels </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/users"> Utilisateurs </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <br>
   

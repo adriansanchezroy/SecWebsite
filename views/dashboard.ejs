@@ -5,7 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tableau de bord</title>
-  <link rel="stylesheet" href="css/styles.css">
+
+
+
 
 </head>
 <body>
@@ -15,23 +17,27 @@
   <br>
 
   <header>
+  <div class="container-lg mt-3">
   <h1>Tableau de bord</h1>
+  <h4>Nouveau mot de passe</h4>
+
   <form action="/newPWD" method="POST" id="change-password-form">
     <div>
-      <label for="oldpassword">Ancien mot de passe:</label>
+      <label for="oldpassword">Ancien mot de passe :</label>
       <input type="password" id="oldpassword" name="oldpassword" required>
     </div>
     <div>
-      <label for="newpassword">Nouveau mot de passe:</label>
+      <label for="newpassword">Nouveau mot de passe :</label>
       <input type="password" id="newpassword" name="newpassword" required>
     </div>
     <div>
-      <label for="confirm-password">Confirmer le nouveau mot de passe:</label>
+      <label for="confirm-password">Confirmer le nouveau mot de passe :</label>
       <input type="password" id="confirmpassword" name="confirmpassword" required>
     </div>
-    <button type="submit">Changer le mot de passe</button>
+    <button type="submit">Modifier</button>
   </form>
-  <%- include('footer') %>
-  <script src="newPWD.js"></script>
+</div>
+<%- include('footer') %> <!-- Inclure le footer -->
+<script src="newPWD.js"></script>
 </body>
 </html>

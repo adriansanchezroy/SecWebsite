@@ -2,16 +2,17 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/bouton.css">
+
 
   <header>
-    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+    <nav class="navbar navbar-expand-sm bg-light navbar-light justify-content-right">
         <a class="navbar-brand" href="#">
             <img src="https://www.etsmtl.ca/getmedia/f6b1f0f3-c9d2-42b6-b25f-b9576b0295ba/Logo_ETS_TypoGrise_D_FR" alt="Logo" style="width:100%;">
           </a>
-          <form action="/logout" method="POST" id="logout-form">
-            <button type="submit">Se déconnecter</button>
-          </form>
-      <ul class="navbar-nav">
+
+      <ul class="navbar-nav mx-auto">
         <li class="nav-item">
           <a class="nav-link" href="/dashboard"> Tableau de bord </a>
         </li>
@@ -25,9 +26,12 @@
           <a class="nav-link" href="/clients/residential"> Clients Résidentiels </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/users" id="view-users"> Utilisateurs </a>
+          <a class="nav-link" href="/users"> Utilisateurs </a>
         </li>
       </ul>
+      <formHeader class="header" action="/logout" method="POST" id="logout-form">
+        <button type="submit">Se déconnecter</button>
+      </formHeader>
     </nav>
   </header>
   <br>

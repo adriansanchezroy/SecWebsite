@@ -101,7 +101,7 @@ router.get('/clients/business', authenticateToken, async (req, res) => {
     const token = req.session.token;
     const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
 
-    if (decoded.role != 'admin' && decoded.role != 'business') {
+    if (decoded.role != 'admin' && decoded.role != 'residential') {
       return res.status(403).send('Access denied');
     }
 
@@ -124,7 +124,7 @@ router.get('/clients/residential', authenticateToken, async (req, res) => {
     const token = req.session.token;
     const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
 
-    if (decoded.role != 'admin' && decoded.role != 'residentiel') {
+    if (decoded.role != 'admin' && decoded.role != 'business') {
       return res.status(403).send('Access denied');
     }
 

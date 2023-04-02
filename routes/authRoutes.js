@@ -199,8 +199,10 @@ router.post('/change-password', async (req, res) => {
   user = await User.findOne({username});
 
   const passwordMatch = await bcrypt.compare(oldPassword, user.password);
-  const specialChar = /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/;
+  const specialChar = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/;
   const isPasswordValid = specialChar.test(newPassword);
+
+  console.log(newPassword)
 
   if (!isPasswordValid) {
     return res.status(400).json({ error: 'Le nouveau mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.' });

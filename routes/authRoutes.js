@@ -12,7 +12,7 @@ router.get('/login', (req, res) => {
   });
 
 // Get the dashboard page and render it
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard',authenticateToken, (req, res) => {
   res.render('dashboard');
 });
 
@@ -74,7 +74,14 @@ router.get('/users', authenticateToken, async (req, res) => {
 // Get the users from the database and render the users page
 router.get('/clients/business', authenticateToken, async (req, res) => {
   try {
-   
+   //Permet le blocage si le role n est pas admin ou business
+    const token = req.session.token;
+    const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+
+    if (decoded.role != 'admin' && decoded.role != 'business') {
+      return res.status(403).send('Access denied');
+    }
+
     const users = await User.find().populate("roles");
     res.render('usersA', { users});
     
@@ -87,7 +94,14 @@ router.get('/clients/business', authenticateToken, async (req, res) => {
 // Get the users from the database and render the users page
 router.get('/clients/residential', authenticateToken, async (req, res) => {
   try {
-   
+  //Permet le blocage si le role n est pas admin ou residentiel
+    const token = req.session.token;
+    const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+
+    if (decoded.role != 'admin' && decoded.role != 'residentiel') {
+      return res.status(403).send('Access denied');
+    }
+
     const users = await User.find().populate("roles");
     res.render('usersR', { users});
     
@@ -100,7 +114,14 @@ router.get('/clients/residential', authenticateToken, async (req, res) => {
 // Get the users from the database and render the users page
 router.get('/admin', authenticateToken, async (req, res) => {
   try {
-   
+   //Permet le blocage si le role n est pas admin
+    const token = req.session.token;
+    const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+
+    if (decoded.role != 'admin') {
+      return res.status(403).send('Access denied');
+    }
+
     const users = await User.find().populate("roles");
     res.render('admin', { users});
     

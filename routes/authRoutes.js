@@ -14,7 +14,7 @@ router.get('/login', (req, res) => {
   });
 
 // Get the dashboard page and render it
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard',authenticateToken, (req, res) => {
   res.render('dashboard');
 });
 
@@ -97,27 +97,22 @@ router.get('/clients/business', authenticateToken, async (req, res) => {
   token = req.session.token;
 
   try {
-    var decoded = decodeToken(token);
+   //Permet le blocage si le role n est pas admin ou business
+    const token = req.session.token;
+    const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+
+    if (decoded.role != 'admin' && decoded.role != 'business') {
+      return res.status(403).send('Access denied');
+    }
+
+    const users = await User.find();
+    res.render('usersA', { users});
+    
   } catch (err) {
     // Handle the error (invalid token, expired token, etc.)
     res.status(401).send('Invalid or expired token');
   }
-  
-  var roles = decoded.roles[0]; // TODO: make it work with multiple roles
 
-  if (hasRole(roles, 'business' || 'admin')) {
-    try {
-      const users = await User.find();
-      res.render('usersA', { users});
-      
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Error retrieving users from the database.');
-    }
-  }
-  else{
-    res.status(403).send('Access denied. You do not have the required role.');
-  }
 });
 
 // Get the users from the database and render the users page
@@ -125,27 +120,22 @@ router.get('/clients/residential', authenticateToken, async (req, res) => {
   token = req.session.token;
 
   try {
-    var decoded = decodeToken(token);
+  //Permet le blocage si le role n est pas admin ou residentiel
+    const token = req.session.token;
+    const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+
+    if (decoded.role != 'admin' && decoded.role != 'residentiel') {
+      return res.status(403).send('Access denied');
+    }
+
+    const users = await User.find().populate("roles");
+    res.render('usersR', { users});
+    
   } catch (err) {
     // Handle the error (invalid token, expired token, etc.)
     res.status(401).send('Invalid or expired token');
   }
-  
-  var roles = decoded.roles[0];
 
-  if (hasRole(roles, 'residential' || 'admin')) {
-    try {
-      const users = await User.find();
-      res.render('usersR', { users});
-      
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Error retrieving users from the database.');
-    }
-  }
-  else{
-    res.status(403).send('Access denied. You do not have the required role.');
-  }
 });
 
 // Get the users from the database and render the users page
@@ -153,26 +143,20 @@ router.get('/admin', authenticateToken, async (req, res) => {
   token = req.session.token;
 
   try {
-    var decoded = decodeToken(token);
+   //Permet le blocage si le role n est pas admin
+    const token = req.session.token;
+    const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+
+    if (decoded.role != 'admin') {
+      return res.status(403).send('Access denied');
+    }
+
+    const users = await User.find().populate("roles");
+    res.render('admin', { users});
+    
   } catch (err) {
     // Handle the error (invalid token, expired token, etc.)
     res.status(401).send('Invalid or expired token');
-  }
-  
-  var roles = decoded.roles[0];
-
-  if (hasRole(roles, 'admin')) {
-    try {
-      const users = await User.find();
-      res.render('admin', { users});
-      
-    } catch (err) {
-      console.error(err);
-      res.status(500).send('Error retrieving users from the database.');
-    }
-  }
-  else{
-    res.status(403).send('Access denied. You do not have the required role.');
   }
 });
 
@@ -201,6 +185,62 @@ router.post("/addUser", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "An error occurred while creating the user." });
   }
 });
+
+// Change the password
+router.post('/change-password', async (req, res) => {
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
+  const confirmNewPassword = req.body.confirmPassword;
+
+
+  const token = req.session.token;
+  const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+  const username = decoded.username;
+
+  let user;
+  user = await User.findOne({username});
+
+  const passwordMatch = await bcrypt.compare(oldPassword, user.password);
+  const specialChar = /^(?=.[a-z])(?=.[A-Z])(?=.\d)(?=.[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/;
+  const isPasswordValid = specialChar.test(newPassword);
+
+  if (!isPasswordValid) {
+    return res.status(400).json({ error: 'Le nouveau mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.' });
+  }
+  if (!passwordMatch) {
+    return res.status(401).json({ error: 'Mot de passe incorrect.' });
+  }
+
+  if (newPassword !== confirmNewPassword) {
+    return res.status(400).json({ error: 'Les nouveaux mots de passe ne correspondent pas.' });
+  }
+
+  if (newPassword === oldPassword) {
+    return res.status(400).json({ error: 'Le nouveau mot de passe doit être différent de l\'ancien.' });
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  console.log(hashedPassword);
+  user.password = hashedPassword;
+  
+  await user.save();
+
+});
+
+
+// Log out
+router.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error logging out:', err);
+      res.status(500).send('Error logging out');
+    } else {
+      res.clearCookie('connect.sid');
+      res.redirect('/login');
+    }
+  });
+});
+
 
 router.post("/addRole/:userId", async (req, res) => {
   const userId = req.params.userId;

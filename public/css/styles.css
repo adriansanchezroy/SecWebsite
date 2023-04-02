@@ -2,20 +2,21 @@ body {
     font-family: Arial, sans-serif;
     max-width: 100%;
     margin: 0 auto;
-    padding: 2rem;
     background-color: #fff;
     font-size: medium;
   }
   
-  form {
+
+  form  {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 300px;
+    max-width: 40%;
+    position: relative;
   }
   
   div {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
   }
   
   label {
@@ -29,37 +30,6 @@ body {
     font-size: 1rem;
   }
   
-  button {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-}
-
-button:focus {
-  outline: none;
-}
-
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-content {
-  display: none;
-  position: absolute;
-  z-index: 1;
-}
-
-.dropdown:hover .dropdown-content {
-  display: block;
-}
 
 /* For modal in users page */
 .modal {

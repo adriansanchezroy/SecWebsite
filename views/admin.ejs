@@ -4,68 +4,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Utilisateurs</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <title>Administration</title>
 
 </head>
 <body>
+  <%- include('link') %>
+  <%- include('header') %>
 
-    <%- include('header') %>
 
   <br>
 
-  <header>
-  <h1>Utilisateurs</h1>
-  </header>
-  <main>
-  <form action="/addUser" method="POST">
-    <button type="submit">Créer Utilisateurs</button>
-  </form>
-  <table class="table table-striped table-bordered">
-    <thead class="thead-dark">
-      <tr>
-        <th>Identifiant</th>
-        <th>Utilisateur</th>
-        <th>Rôles</th>
-        <th>Bloqué</th>
-        <th>Mot de passe modifié</th>
-        <th>Dernière connexion</th>
-        <th>Login attempts</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
+  <div class="container-lg mt-3">
+    <h2>Administration</h2>
     <br>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" data-toggle="tab" href="#configCon">Configuration de Connexion</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#configComm">Configuration de Complexité du mot de passe</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="tab" href="#configMod">Configuration de Modification de mot de passe</a>
+      </li>
+    </ul>
+  
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div id="home" class="container tab-pane active"><br>
+        <h3>HOME</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+      </div>
+      <div id="menu1" class="container tab-pane fade"><br>
+        <h3>Menu 1</h3>
+        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      </div>
+      <div id="menu2" class="container tab-pane fade"><br>
+        <h3>Menu 2</h3>
+        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+      </div>
+    </div>
+  </div>
 
-    <tbody>
-      <% users.forEach((user) => { %>
-        <tr>
-          <td><%= user._id %></td>
-          <td><%= user.username %></td>
-          <td>
-            <% user.roles.forEach((role) => { %>
-              <%= user.roles %><br>
-            <% }) %>
-          </td>
-          <td><%= user.blocked %></td>
-          <td><%= user.passModified %></td>
-          <td><%= user.lastLoginDate %></td>
-          <td>Good: <%= user.goodConnexions %> Bad: <%= user.badConnexions %></td>
-          <td>
-            <div class="dropdown">
-              <button class="dropbtn">Actions</button>
-              <div class="dropdown-content">
-                <a href="#">Ajouter rôle admin</a>
-                <a href="#">Ajouter rôle résidentiel</a>
-                <a href="#">Ajouter rôle affaire</a>
-                <a href="#">Réinitialiser mot de passe</a>
-              </div>
-            </div>
-          </td>
-        </tr>
-      <% }) %>
-    </tbody>
-  </table>
-</main>
 <%- include('footer') %> <!-- Inclure le footer -->
 </body>
 </html>

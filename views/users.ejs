@@ -2,12 +2,12 @@
 
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Utilisateurs</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
+
 <body>
   <br>
   <header>
@@ -71,13 +71,13 @@
           <td><%= user.lastLoginDate %></td>
           <td>Good: <%= user.goodConnexions %> Bad: <%= user.badConnexions %></td>
           <td>
-            <div class="dropdown">
-              <button class="dropbtn">Actions</button>
-              <div class="dropdown-content">
-                <a href="#" class="addRole" data-userid="<%= user._id %>" data-role="admin">Ajouter rôle admin</a>
-                <a href="#" class="addRole" data-userid="<%= user._id %>" data-role="residential">Ajouter rôle résidentiel</a>
-                <a href="#" class="addRole" data-userid="<%= user._id %>" data-role="business">Ajouter rôle affaire</a>
-                <a href="#" id="reinitPass">Réinitialiser mot de passe</a>
+            <div class="btn-group">
+              <button class="dropbtn dropdown-toggle" data-toggle="dropdown">Actions</button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#" data-userid="<%= user._id %>" data-role="admin">Ajouter rôle admin</a>
+                <a class="dropdown-item" href="#" data-userid="<%= user._id %>" data-role="residential">Ajouter rôle résidentiel</a>
+                <a class="dropdown-item" href="#" data-userid="<%= user._id %>" data-role="business">Ajouter rôle affaire</a>
+                <a class="dropdown-item" href="#" id="reinitPass">Réinitialiser mot de passe</a>
               </div>
             </div>
           </td>

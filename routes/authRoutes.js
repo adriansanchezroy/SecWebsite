@@ -103,7 +103,7 @@ router.get('/clients/business', authenticateToken, async (req, res) => {
     res.status(401).send('Invalid or expired token');
   }
   
-  var roles = decoded.roles[0];
+  var roles = decoded.roles[0]; // TODO: make it work with multiple roles
 
   if (hasRole(roles, 'business' || 'admin')) {
     try {
@@ -201,6 +201,40 @@ router.post("/addUser", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "An error occurred while creating the user." });
   }
 });
+
+router.post("/addRole/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  const role = req.body.role;
+
+  try {
+    // Fetch the user from the database
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
+
+    // Add the new role to the user's roles array, if it doesn't already exist
+    if (!user.roles.includes(role)) {
+      user.roles.push(role);
+    }
+
+    // Save the updated user
+    await user.save();
+    res.status(200).json({ message: "Role added successfully." });
+  } catch (error) {
+    console.error("Error adding role:", error);
+    res.status(500).json({ message: "An error occurred while adding the role." });
+  }
+});
+
+
+
+
+
+
+
 
 
 module.exports = router;

@@ -5,14 +5,14 @@
   <title>Utilisateurs</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/styles.css">
 
 </head>
 
 <body>
-
+  <%- include('link') %>
   <%- include('header') %>
-  
+  <%- include('menu') %>
+
 <br>
 <div class="container-lg mt-3">
   <header>
@@ -52,8 +52,8 @@
           <td><%= user.lastLoginDate %></td>
           <td>Good: <%= user.goodConnexions %> Bad: <%= user.badConnexions %></td>
           <td>
-            <div class="dropdown">
-              <button class="dropbtn btn-primary dropdown-toggle" data-toggle="dropdown">Actions</button>
+            <div class="btn-group">
+              <button class="dropbtn dropdown-toggle" data-toggle="dropdown">Actions</button>
               <div class="dropdown-menu">
                 <a class="dropdown-item" href="#">Ajouter rôle admin</a>
                 <a class="dropdown-item" href="#">Ajouter rôle résidentiel</a>

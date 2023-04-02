@@ -15,14 +15,16 @@
   <h1>Utilisateurs</h1>
   </header>
   <main>
-  <form action="/addUser" method="POST">
-    <button type="submit">Créer Utilisateurs</button>
-  </form>
+    <button type="submit" id="openAddUserModal">Créer Utilisateurs</button>
 <div id="addUserModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
     <form id="addUserForm">
       <h2>Add User</h2>
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" required><br>
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" name="lastName" required><br>
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required><br>
       <label for="password">Password:</label>

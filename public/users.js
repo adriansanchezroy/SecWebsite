@@ -1,5 +1,5 @@
 const addUserModal = document.getElementById("addUserModal");
-const openAddUserModalBtn = document.getElementById("addUserModal");
+const openAddUserModalBtn = document.getElementById("openAddUserModal");
 const closeAddUserModalBtn = document.querySelector(".close");
 
 const addRoleButtons = document.querySelectorAll(".addRole");

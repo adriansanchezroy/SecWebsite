@@ -1,0 +1,55 @@
+
+formHeader {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 15%;
+    
+  }
+
+  decoBut {
+    background-color: #ff0000e7;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 5px;
+  }
+  decoBut:hover {
+    background-color: #520303;
+}
+
+  button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+}
+
+button:focus {
+  outline: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}

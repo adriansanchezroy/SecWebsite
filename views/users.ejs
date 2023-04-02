@@ -2,18 +2,18 @@
 
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Utilisateurs</title>
-  <link rel="stylesheet" href="css/styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
+
 <body>
-
+  <%- include('link') %>
   <%- include('header') %>
-  
-  <br>
 
+<br>
+<div class="container-lg mt-3">
   <header>
   <h1>Utilisateurs</h1>
   </header>
@@ -73,13 +73,13 @@
           <td><%= user.lastLoginDate %></td>
           <td>Good: <%= user.goodConnexions %> Bad: <%= user.badConnexions %></td>
           <td>
-            <div class="dropdown">
-              <button class="dropbtn">Actions</button>
-              <div class="dropdown-content">
-                <a href="#">Ajouter rôle admin</a>
-                <a href="#">Ajouter rôle résidentiel</a>
-                <a href="#">Ajouter rôle affaire</a>
-                <a href="#">Réinitialiser mot de passe</a>
+            <div class="btn-group">
+              <button class="dropbtn dropdown-toggle" data-toggle="dropdown">Actions</button>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="#">Ajouter rôle admin</a>
+                <a class="dropdown-item" href="#">Ajouter rôle résidentiel</a>
+                <a class="dropdown-item" href="#">Ajouter rôle affaire</a>
+                <a class="dropdown-item" href="#">Réinitialiser mot de passe</a>
               </div>
             </div>
           </td>
@@ -88,6 +88,7 @@
     </tbody>
   </table>
 </main>
+</div>
 <%- include('footer') %> <!-- Inclure le footer -->
 </body>
 </html>

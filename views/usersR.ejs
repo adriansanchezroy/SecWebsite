@@ -30,11 +30,11 @@
         <tbody>
           <% users.forEach((user) => { %>
               <% user.roles.forEach((role) => { %>
-                    <% if(user.roles == "residential") { %>
+                    <% if(role == "residential") { %>
                     <tr>
                         <td><%= user.firstName %></td>
                         <td><%= user.lastName %></td>
-                        <td><%= user.roles %></td>
+                        <td><%= role %></td>
                     </tr>
 
                 <% } %>

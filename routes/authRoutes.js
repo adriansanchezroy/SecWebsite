@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const router = express.Router();
 const authenticateToken = require('../middleware/auth');
 const hasRole = require('../utils/hasRole');
+const PasswordSettings = require('../models/pwdSettings');
 
 // Get the login page and render it
 router.get('/login', (req, res) => {
@@ -109,7 +110,7 @@ router.get('/clients/business', authenticateToken, async (req, res) => {
       return res.status(403).send('Access denied');
     }
 
-    const users = await User.find().populate("roles");
+    const users = await User.find();
     res.render('usersA', { users});
     
   } catch (err) {
@@ -129,7 +130,7 @@ router.get('/clients/residential', authenticateToken, async (req, res) => {
       return res.status(403).send('Access denied');
     }
 
-    const users = await User.find().populate("roles");
+    const users = await User.find();
     res.render('usersR', { users});
     
   } catch (err) {
@@ -174,6 +175,7 @@ router.post("/addUser", authenticateToken, async (req, res) => {
       username,
       password: hashedPassword,
       roles: role,
+      passModified: Date.now(),
     });
 
     await newUser.save();
@@ -183,6 +185,74 @@ router.post("/addUser", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "An error occurred while creating the user." });
   }
 });
+
+router.post("/addRole/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  const role = req.body.role;
+
+  try {
+    // Fetch the user from the database
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
+
+    // Add the new role to the user's roles array, if it doesn't already exist
+    if (!user.roles.includes(role)) {
+      user.roles.push(role);
+    }
+
+    // Save the updated user
+    await user.save();
+    res.status(200).json({ message: "Role added successfully." });
+  } catch (error) {
+    console.error("Error adding role:", error);
+    res.status(500).json({ message: "An error occurred while adding the role." });
+  }
+});
+
+// Route for updating password settings
+router.post('/save-password-settings', async (req, res) => {
+  try {
+    // Save the password settings to the database 
+    const passwordSettings = new PasswordSettings(req.body);
+    await passwordSettings.save();
+
+    res.status(200).json({ message: 'Password settings saved successfully.' });
+  } catch (error) {
+    console.error('Error saving password settings:', error);
+    res.status(500).json({ message: 'An error occurred while saving the password settings.' });
+  }
+});
+
+// Helper function to apply the password settings
+async function applyPasswordSettings(password) {
+  // Retrieve the password settings from the database (you'll need to define the database model for this)
+  // Replace "PasswordSettings" with your database model name
+  const passwordSettings = await PasswordSettings.findOne();
+
+  let regexString = '^';
+
+  if (passwordSettings.requireCapital) {
+    regexString += '(?=.*[A-Z])';
+  }
+  if (passwordSettings.requireNonCapital) {
+    regexString += '(?=.*[a-z])';
+  }
+  if (passwordSettings.requireNumber) {
+    regexString += '(?=.*\\d)';
+  }
+  if (passwordSettings.requireSpecialChar) {
+    regexString += '(?=.*[@$!%?&])';
+  }
+
+  regexString += `[A-Za-z\\d@$!%?&]{${passwordSettings.minLength},${passwordSettings.maxLength}}$`;
+
+  return new RegExp(regexString).test(password);
+}
+
 
 // Change the password
 router.post('/change-password', async (req, res) => {
@@ -200,7 +270,7 @@ router.post('/change-password', async (req, res) => {
 
   const passwordMatch = await bcrypt.compare(oldPassword, user.password);
   const specialChar = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/;
-  const isPasswordValid = specialChar.test(newPassword);
+  const isPasswordValid = await applyPasswordSettings(newPassword);
 
   console.log(newPassword)
 
@@ -240,7 +310,5 @@ router.post('/logout', (req, res) => {
     }
   });
 });
-
-
 
 module.exports = router;

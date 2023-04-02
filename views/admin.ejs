@@ -5,12 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Administration</title>
-
 </head>
 <body>
   <%- include('link') %>
   <%- include('header') %>
-
 
   <br>
 
@@ -32,16 +30,60 @@
   
     <!-- Tab panes -->
     <div class="tab-content">
-      <div id="home" class="container tab-pane active"><br>
-        <h3>HOME</h3>
+      <div id="configCon" class="container tab-pane active"><br>
+        <h3>Configuration de Connexion</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
       </div>
-      <div id="menu1" class="container tab-pane fade"><br>
-        <h3>Menu 1</h3>
-        <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <div id="configComm" class="container tab-pane fade"><br>
+        <h3>Configuration de Complexité du mot de passe</h3>
+        <form id="password-settings-form">
+          <div>
+            <label for="requireCapital">Require a capital letter</label>
+            <label class="switch"> 
+            <input type="checkbox" id="requireCapital" name="requireCapital">
+            <span class="slider round"></span>
+            </label>
+          </div>
+          <div>
+            <label for="requireCapital">Require a non-capital letter</label>
+            <label class="switch"> 
+            <input type="checkbox" id="requireNonCapital" name="requireNonCapital">
+            <span class="slider round"></span>
+            </label>
+          </div>
+          <div>
+            <label for="requireNumber">Require a number</label>
+            <label class="switch"> 
+            <input type="checkbox" id="requireNumber" name="requireNumber">
+            <span class="slider round"></span>
+            </label>
+          </div>
+          <div>
+            <label for="requireSpecialChar">Require a special character</label>
+            <label class="switch"> 
+            <input type="checkbox" id="requireSpecialChar" name="requireSpecialChar">
+            <span class="slider round"></span>
+            </label>
+          </div>
+          <div>
+            <label for="minLength">Minimum password length:</label>
+            <input type="number" id="minLength" name="minLength" min="1">
+          </div>
+          <div>
+            <label for="maxLength">Maximum password length:</label>
+            <input type="number" id="maxLength" name="maxLength" min="1">
+          </div>
+          <div>
+            <label for="adminPassword">Re-enter your password:</label>
+            <input type="password" id="adminPassword" name="adminPassword" required>
+          </div>
+          <div>
+            <button type="submit">Modify</button>
+          </div>
+        </form>
       </div>
-      <div id="menu2" class="container tab-pane fade"><br>
-        <h3>Menu 2</h3>
+      <div id="configMod" class="container tab-pane fade"><br>
+        <h3>Configuration de Modification de mot de passe</h3>
         <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
       </div>
     </div>

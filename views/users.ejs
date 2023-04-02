@@ -18,15 +18,20 @@
   <h1>Utilisateurs</h1>
   </header>
   <main>
-  <form action="/addUser" method="POST">
-    <button type="submit">Créer Utilisateurs</button>
-  </form>
+
+  <button type="button" id="openAddUserModal">Créer Utilisateurs</button>
+
   <!-- Add User Modal -->
 <div id="addUserModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
-    <form id="addUserForm">
+  </div>
+    <form id="addUserForm" action="/addUser" method="POST">
       <h2>Add User</h2>
+      <label for="firstName">First Name:</label>
+      <input type="text" id="firstName" name="firstName" required><br>
+      <label for="lastName">Last Name</label>
+      <input type="text" id="lastName" name="lastName" required><br>
       <label for="username">Username:</label>
       <input type="text" id="username" name="username" required><br>
       <label for="password">Password:</label>
@@ -41,7 +46,6 @@
       </select><br>
       <button type="submit">Create User</button>
     </form>
-  </div>
 </div>
   <table class="table table-striped table-bordered">
     <thead class="thead-dark">
@@ -76,10 +80,9 @@
             <div class="btn-group">
               <button class="dropbtn dropdown-toggle" data-toggle="dropdown">Actions</button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" href="#">Ajouter rôle admin</a>
-                <a class="dropdown-item" href="#">Ajouter rôle résidentiel</a>
-                <a class="dropdown-item" href="#">Ajouter rôle affaire</a>
-                <a class="dropdown-item" href="#">Réinitialiser mot de passe</a>
+                <a class="dropdown-item" id= "addRole" href="#" data-userid="<%= user._id %>" data-role="admin">Ajouter rôle admin</a>
+                <a class="dropdown-item" id= "addRole" href="#" data-userid="<%= user._id %>" data-role="residential">Ajouter rôle résidentiel</a>
+                <a class="dropdown-item" id= "addRole" href="#" data-userid="<%= user._id %>" data-role="business">Ajouter rôle affaire</a>
               </div>
             </div>
           </td>
@@ -89,6 +92,7 @@
   </table>
 </main>
 </div>
-<%- include('footer') %> <!-- Inclure le footer -->
+<footer><%- include('footer') %></footer>
+<script src="users.js"></script>
 </body>
 </html>

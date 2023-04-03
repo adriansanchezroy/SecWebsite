@@ -32,53 +32,69 @@
     <div class="tab-content">
       <div id="configCon" class="container tab-pane active"><br>
         <h3>Configuration de Connexion</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <form>
+          <div>
+            <label for="tentAvantBlocked">Tentatives avant de bloquer le compte</label>
+            <input type="number" id="tentativesBlocked" name="tentativesBlocked">
+          </div>
+          <div>
+            <label for="tempBetweenTent">Temps entre les tentatives (secondes)</label>
+            <input type="number" id="timeBetweenTent" name="timeBetweenTent">
+          </div>
+          <div>
+            <label for="adminPasswordForModif">Mot de passe (pour confirmation)</label>
+            <input type="password" id="adminPasswordForModif" name="adminPasswordForModif" required>
+          </div>
+          <div>
+            <button type="submit">Modifier</button>
+          </div>
+        </form>
       </div>
       <div id="configComp" class="container tab-pane fade"><br>
         <h3>Configuration de Complexité du mot de passe</h3>
         <form id="password-settings-form">
           <div>
-            <label for="requireCapital">Require a capital letter</label>
+            <label for="requireCapital">Requiert une lettre majuscule</label>
             <label class="switch"> 
             <input type="checkbox" id="requireCapital" name="requireCapital">
             <span class="slider round"></span>
             </label>
           </div>
           <div>
-            <label for="requireLowercase">Require a non-capital letter</label>
+            <label for="requireLowercase">Rquiert une lettre minuscule</label>
             <label class="switch"> 
             <input type="checkbox" id="requireLowercase" name="requireLowercase">
             <span class="slider round"></span>
             </label>
           </div>
           <div>
-            <label for="requireNumber">Require a number</label>
+            <label for="requireNumber">Requiert un chiffre</label>
             <label class="switch"> 
             <input type="checkbox" id="requireNumber" name="requireNumber">
             <span class="slider round"></span>
             </label>
           </div>
           <div>
-            <label for="requireSpecial">Require a special character</label>
+            <label for="requireSpecial">Requiert un caractère spécial</label>
             <label class="switch"> 
             <input type="checkbox" id="requireSpecial" name="requireSpecial">
             <span class="slider round"></span>
             </label>
           </div>
           <div>
-            <label for="minLength">Minimum password length:</label>
+            <label for="minLength">Longueur minimum du mot de passe</label>
             <input type="number" id="minLength" name="minLength" min="1">
           </div>
           <div>
-            <label for="maxLength">Maximum password length:</label>
+            <label for="maxLength">Longueur maximum du mot de passe</label>
             <input type="number" id="maxLength" name="maxLength" min="1">
           </div>
           <div>
-            <label for="adminPassword">Re-enter your password:</label>
+            <label for="adminPassword">Mot de passe (pour confirmation)</label>
             <input type="password" id="adminPassword" name="adminPassword" required>
           </div>
           <div>
-            <button type="submit">Modify</button>
+            <button type="submit">Modifier</button>
           </div>
         </form>
       </div>
@@ -86,19 +102,19 @@
         <h3>Configuration de Modification de mot de passe</h3>
         <form id="password-settings-form-modif">
           <div>
-            <label for="reusePass">Réutilisation d'un mot de passe après un nombre de modifications:</label>
+            <label for="reusePass">Réutilisation d'un mot de passe après un nombre de modifications</label>
             <input type="number" id="reusePass" name="reusePass">
           </div>
           <div>
-            <label for="timeModifPass">Temps entre modification obligatoire de mot de passe (minutes):</label>
+            <label for="timeModifPass">Temps entre modification obligatoire de mot de passe (minutes)</label>
             <input type="number" id="timeModifPass" name="timeModifPass">
           </div>
           <div>
-            <label for="adminPasswordForModif">Re-enter your password:</label>
+            <label for="adminPasswordForModif">Mot de passe (pour confirmation)</label>
             <input type="password" id="adminPasswordForModif" name="adminPasswordForModif" required>
           </div>
           <div>
-            <button type="submit">Modify</button>
+            <button type="submit">Modifier</button>
           </div>
         </form>
       </div>

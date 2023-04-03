@@ -11,7 +11,7 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 40%;
+    max-width: 60%;
     position: relative;
   }
   
@@ -127,4 +127,8 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.table-responsive {
+  max-height: 100%;
 }

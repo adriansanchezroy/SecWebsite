@@ -21,7 +21,7 @@
   <h1>Tableau de bord</h1>
   <h4>Nouveau mot de passe</h4>
 
-  <form action="/newPWD" method="POST" id="change-password-form">
+  <form id="change-password-form">
     <div>
       <label for="oldpassword">Ancien mot de passe :</label>
       <input type="password" id="oldpassword" name="oldpassword" required>
@@ -39,7 +39,5 @@
 </div>
 <%- include('footer') %> <!-- Inclure le footer -->
 <script src="newPWD.js"></script>
-
-
 </body>
 </html>

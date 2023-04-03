@@ -302,8 +302,6 @@ router.post('/change-password', async (req, res) => {
   const passwordMatch = await bcrypt.compare(oldPassword, user.password);
   const isPasswordValid = await applyPasswordSettings(newPassword);
 
-  console.log(newPassword)
-
   if (!passwordMatch) {
     return res.status(401).json({ error: 'Mot de passe incorrect.' });
   }
@@ -317,16 +315,24 @@ router.post('/change-password', async (req, res) => {
     return res.status(400).json({ error: 'Les nouveaux mots de passe ne correspondent pas.' });
   }
 
-  if (newPassword === oldPassword) {
-    return res.status(400).json({ error: 'Le nouveau mot de passe doit être différent de l\'ancien.' });
+  // Check if the new password is different from the last X passwords
+  const pastPasswords = user.pastPasswords.slice(-passwordSettings.differentFromXLastPwd);
+  const isNewPasswordDifferent = await Promise.all(pastPasswords.map(async (pastPassword) => {
+    return !(await bcrypt.compare(newPassword, pastPassword));
+  })).then((results) => results.every((result) => result));
+
+  if (!isNewPasswordDifferent) {
+    return res.status(400).json({ error: 'Le nouveau mot de passe doit être différent des ' + passwordSettings.differentFromXLastPwd + ' derniers mots de passe.' });
   }
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);
   console.log(hashedPassword);
   user.password = hashedPassword;
+  user.pastPasswords.push(hashedPassword);
+  user.passModified = Date.now();
   
   await user.save();
-
+  res.status(200).json({ message: 'Password modified successfully.' });
 });
 
 // Log out

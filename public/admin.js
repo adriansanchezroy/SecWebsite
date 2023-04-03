@@ -12,7 +12,7 @@ configCompTab.addEventListener('click', async () => {
 
     if (response.status === 200) {
       const passwordSettings = await response.json();
-      // Set the values for your checkboxes
+      // Set the values for the checkboxes
       document.getElementById('requireCapital').checked = passwordSettings.requireCapital;
       document.getElementById('requireLowercase').checked = passwordSettings.requireLowercase;
       document.getElementById('requireNumber').checked = passwordSettings.requireNumber;

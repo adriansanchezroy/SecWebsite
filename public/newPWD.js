@@ -1,25 +1,7 @@
 const changePasswordForm = document.getElementById('change-password-form');
 
-// async function fetchPasswordSettings() {
-//   try {
-//     const response = await fetch('/password-settings');
-//     if (response.ok) {
-//       return await response.json();
-//     }
-//   } catch (error) {
-//     console.error('Error fetching password settings:', error);
-//   }
-//   return null;
-// }
-
 changePasswordForm.addEventListener('submit', async (event) => {
   event.preventDefault();
-
-  // const passwordSettings = await fetchPasswordSettings();
-  // if (!passwordSettings) {
-  //   alert('Failed to fetch password settings. Please try again later.');
-  //   return;
-  // }
 
   const formData = new FormData(changePasswordForm);
   const oldPassword = formData.get('oldpassword');
@@ -32,7 +14,7 @@ changePasswordForm.addEventListener('submit', async (event) => {
       newPassword: newPassword,
       confirmPassword: confirmPassword,
     };
-
+    
     try {
       const response = await fetch('/change-password', {
         method: 'POST',
@@ -42,7 +24,7 @@ changePasswordForm.addEventListener('submit', async (event) => {
         body: JSON.stringify(data),
       });
 
-      if (response.status === 200) {
+      if (response.ok) {
         alert('Password changed successfully');
         window.location.href = '/login';
       } else {

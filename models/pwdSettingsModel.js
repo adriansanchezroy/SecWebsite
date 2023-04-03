@@ -29,9 +29,13 @@ const passwordSettingsSchema = new mongoose.Schema({
     type: Number,
     default: 3,
 },
-  expireAfterXDays: {
+  expireAfterXMinutes: {
     type: Number,
     default: 90,
+},
+  maxAttempts: {
+    type: Number,
+    default: 3,
 },
 });
 

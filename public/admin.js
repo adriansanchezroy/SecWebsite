@@ -1,5 +1,6 @@
 const passwordSettingsForm = document.getElementById('password-settings-form');
 const configCompTab = document.getElementById('configCompTab');
+const passwordSettingsFormModif = document.getElementById('password-settings-form-modifyPass');
 
 configCompTab.addEventListener('click', async () => {
   try {
@@ -26,7 +27,6 @@ configCompTab.addEventListener('click', async () => {
     console.error('Error fetching password settings:', error);
   }
 });
-
 
 passwordSettingsForm.addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -73,4 +73,42 @@ passwordSettingsForm.addEventListener('submit', async (event) => {
       alert('An error occurred during password settings update');
     }
   });
+
+  passwordSettingsFormModif.addEventListener('submit', async (event) => {
+    event.preventDefault();
+  
+    const form = event.target;
+    const formData = new FormData(form);
+  
+    var differentFromXLastPwd = formData.get('differentFromXLastPwd');
+    var expireAfterXMinutes = formData.get('expireAfterXMinutes');
+    const adminPassword = formData.get('adminPasswordForModif');
+  
+    const data = {
+      differentFromXLastPwd,
+      expireAfterXMinutes,
+      adminPassword,
+    };
+  
+    try {
+      const response = await fetch('/update-modify-password-settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+  
+      if (response.status === 200) {
+        alert('Password modification settings updated successfully');
+      } else {
+        const error = await response.text();
+        alert(error);
+      }
+    } catch (error) {
+      console.error('Error during password settings update:', error);
+      alert('An error occurred during password settings update');
+    }
+  });
+  
   

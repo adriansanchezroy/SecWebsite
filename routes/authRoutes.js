@@ -21,10 +21,16 @@ router.get('/dashboard',authenticateToken, (req, res) => {
   res.render('dashboard');
 });
 
+// Get the force password modification page and render it
+router.get('/force-modify-password', (req, res) => {
+  res.render('forceModifyPass');
+});
+
 // Post the login form and authenticate the user
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   let user;
+  let passwordSettings;
   try {
     user = await User.findOne({ username });
   } catch (error) {
@@ -35,10 +41,17 @@ router.post('/login', async (req, res) => {
     await User.updateOne({ username: req.body.username }, { $inc: { badConnexions: 1 } });
     return res.status(401).json({ message: 'Incorrect username or password.' });
   }
+  try {
+    passwordSettings = await PasswordSettings.findOne();
+  } catch (error) {
+    console.error('Error fetching password settings:', error);
+    return res.status(500).json({ message: 'An error occurred during authentication.' });
+  }
+
 
   const validPassword = await bcrypt.compare(password, user.password);
   if (!validPassword) {
-    if(user.badConnexions >= 10){
+    if(user.badConnexions >= passwordSettings.maxAttempts){
 
       await User.updateOne({ username: req.body.username }, { $set: { blocked: true } });
       return res.status(401).json({ message: 'Too many attempts. Your account has been blocked.' });
@@ -65,8 +78,18 @@ router.post('/login', async (req, res) => {
     roles: roles,
   };
 
+  const date = new Date().getTime();
+  const lastPassModifyDate = new Date(user.passModified).getTime();
+  const expireDate = lastPassModifyDate + (passwordSettings.expireAfterXMinutes * 60);
+
   const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
   req.session.token = accessToken;
+  await User.updateOne({ username: req.body.username }, { $set: { badConnexions: 0 } });
+
+  if(date >= expireDate){
+    return res.status(203).json({ message: 'You need to modify your password', accessToken: accessToken });
+  }
+  
   res.json({ accessToken: accessToken });
 });
 
@@ -286,7 +309,88 @@ router.post('/update-password-settings', async (req, res) => {
   }
 });
 
-// Change the password
+router.post('/update-modify-password-settings', async (req, res) => {
+  var username;
+  const { differentFromXLastPwd, expireAfterXMinutes, adminPassword } = req.body;
+
+  try {
+    const token = req.session.token;
+    const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+    username = decoded.username;
+    var user = await User.findOne({ username });
+    const passwordMatch = await bcrypt.compare(adminPassword, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid password.' });
+    }
+  } catch (error) {
+    console.error('Error with token:', error);
+    res.status(401).send('Invalid or expired token');
+    return;
+  }
+
+  try {
+    // Check if password settings already exist
+    let passwordSettings = await PasswordSettings.findOne();
+
+    if (passwordSettings) {
+      // Update existing password settings
+      passwordSettings.differentFromXLastPwd = differentFromXLastPwd;
+      passwordSettings.expireAfterXMinutes = expireAfterXMinutes;
+
+    } 
+    // Save the updated password settings
+    await passwordSettings.save();
+
+    res.status(200).json({ message: 'Password modification settings saved successfully.' });
+  } catch (error) {
+    console.error('Error saving password modification settings:', error);
+    res.status(500).json({ message: 'An error occurred while saving the password modification settings.' });
+  }
+});
+
+router.post('/update-connexion-config', async (req, res) => {
+  var username;
+  const { maxAttempts, timeBetweenAttempts, adminPassword } = req.body;
+
+  try {
+    const token = req.session.token;
+    const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+    username = decoded.username;
+    var user = await User.findOne({ username });
+    const passwordMatch = await bcrypt.compare(adminPassword, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid password.' });
+    }
+  } catch (error) {
+    console.error('Error with token:', error);
+    res.status(401).send('Invalid or expired token');
+    return;
+  }
+
+  try {
+    // Check if password settings already exist
+    let passwordSettings = await PasswordSettings.findOne();
+
+    if (passwordSettings) {
+      // Update existing password settings
+      passwordSettings.differentFromXLastPwd = differentFromXLastPwd;
+      passwordSettings.expireAfterXMinutes = expireAfterXMinutes;
+
+    } 
+    // Save the updated password settings
+    await passwordSettings.save();
+
+    res.status(200).json({ message: 'Password modification settings saved successfully.' });
+  } catch (error) {
+    console.error('Error saving password modification settings:', error);
+    res.status(500).json({ message: 'An error occurred while saving the password modification settings.' });
+  }
+});
+
+
+// Change the password route
 router.post('/change-password', async (req, res) => {
   const oldPassword = req.body.oldPassword;
   const newPassword = req.body.newPassword;

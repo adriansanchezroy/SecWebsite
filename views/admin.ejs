@@ -35,15 +35,15 @@
         <form>
           <div>
             <label for="tentAvantBlocked">Tentatives avant de bloquer le compte</label>
-            <input type="number" id="tentativesBlocked" name="tentativesBlocked">
+            <input type="number" id="attemptsBlocked" name="attemptsBlocked">
           </div>
           <div>
             <label for="tempBetweenTent">Temps entre les tentatives (secondes)</label>
-            <input type="number" id="timeBetweenTent" name="timeBetweenTent">
+            <input type="number" id="timeBetweenAttempts" name="timeBetweenAttempts">
           </div>
           <div>
-            <label for="adminPasswordForModif">Mot de passe (pour confirmation)</label>
-            <input type="password" id="adminPasswordForModif" name="adminPasswordForModif" required>
+            <label for="adminPasswordForConnexionModif">Mot de passe (pour confirmation)</label>
+            <input type="password" id="adminPasswordForConnexionModif" name="adminPasswordConnexionModif" required>
           </div>
           <div>
             <button type="submit">Modifier</button>
@@ -100,14 +100,14 @@
       </div>
       <div id="configMod" class="container tab-pane fade"><br>
         <h3>Configuration de Modification de mot de passe</h3>
-        <form id="password-settings-form-modif">
+        <form id="password-settings-form-modifyPass">
           <div>
-            <label for="reusePass">Réutilisation d'un mot de passe après un nombre de modifications</label>
-            <input type="number" id="reusePass" name="reusePass">
+            <label for="differentFromXLastPwd">Réutilisation d'un mot de passe après un nombre de modifications</label>
+            <input type="number" id="differentFromXLastPwd" name="differentFromXLastPwd" min="1">
           </div>
           <div>
             <label for="timeModifPass">Temps entre modification obligatoire de mot de passe (minutes)</label>
-            <input type="number" id="timeModifPass" name="timeModifPass">
+            <input type="number" id="expireAfterXMinutes" name="expireAfterXMinutes">
           </div>
           <div>
             <label for="adminPasswordForModif">Mot de passe (pour confirmation)</label>

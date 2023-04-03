@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const passwordSettingsSchema = new mongoose.Schema({
-  requireCapitalLetter: {
+  requireCapital: {
     type: Boolean,
     default: true,
   },
-  requireLowercaseLetter: {
+  requireLowercase: {
     type: Boolean,
     default: true,
   },
@@ -13,7 +13,7 @@ const passwordSettingsSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  requireSpecialCharacter: {
+  requireSpecial: {
     type: Boolean,
     default: true,
   },
@@ -25,11 +25,11 @@ const passwordSettingsSchema = new mongoose.Schema({
     type: Number,
     default: 30,
   },
-  differentFromXLastPasswords: {
+  differentFromXLastPwd: {
     type: Number,
     default: 3,
 },
-    expireAfterXDays: {
+  expireAfterXDays: {
     type: Number,
     default: 90,
 },

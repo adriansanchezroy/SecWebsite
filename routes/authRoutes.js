@@ -6,7 +6,10 @@ const bcrypt = require('bcryptjs');
 const router = express.Router();
 const authenticateToken = require('../middleware/auth');
 const hasRole = require('../utils/hasRole');
-const PasswordSettings = require('../models/pwdSettings');
+const applyPasswordSettings = require('../utils/passConfig');
+const generatePassConfigMsg = require('../utils/generatePassConfigMsg');
+const PasswordSettings = require('../models/pwdSettingsModel');
+
 
 // Get the login page and render it
 router.get('/login', (req, res) => {
@@ -23,7 +26,7 @@ router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   let user;
   try {
-    user = await User.findOne({ username }).populate("roles");
+    user = await User.findOne({ username });
   } catch (error) {
     console.error('Error fetching user:', error);
     return res.status(500).json({ message: 'An error occurred during authentication.' });
@@ -69,8 +72,8 @@ router.post('/login', async (req, res) => {
 
 // Get the users from the database and render the users page
 router.get('/users', authenticateToken, async (req, res) => {
-  let username = '';
-  let roles = '';
+  var username;
+  var roles;
   token = req.session.token;
   try {
     // Decode the token using the secret
@@ -96,6 +99,60 @@ router.get('/users', authenticateToken, async (req, res) => {
   }}
   else{
     res.status(403).send('Access denied. You do not have the required role.');
+  }
+});
+
+// Add a new user to the database
+router.post("/addUser", authenticateToken, async (req, res) => {
+  const { firstName, lastName, username, password, role } = req.body;
+
+  // Validate and create the user
+  try {
+    let hashedPassword = password;
+
+    hashedPassword = await bcrypt.hash(hashedPassword, 10);
+
+    const newUser = new User({
+      firstName,
+      lastName,
+      username,
+      password: hashedPassword,
+      roles: role,
+      passModified: Date.now(),
+    });
+
+    await newUser.save();
+    res.status(200).json({ message: "User created successfully." });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ message: "An error occurred while creating the user." });
+  }
+});
+
+router.post("/addRole/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  const role = req.body.role;
+
+  try {
+    // Fetch the user from the database
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
+
+    // Add the new role to the user's roles array, if it doesn't already exist
+    if (!user.roles.includes(role)) {
+      user.roles.push(role);
+    }
+
+    // Save the updated user
+    await user.save();
+    res.status(200).json({ message: "Role added successfully." });
+  } catch (error) {
+    console.error("Error adding role:", error);
+    res.status(500).json({ message: "An error occurred while adding the role." });
   }
 });
 
@@ -159,65 +216,52 @@ router.get('/admin', authenticateToken, async (req, res) => {
   }
 });
 
-// Add a new user to the database
-router.post("/addUser", authenticateToken, async (req, res) => {
-  const { firstName, lastName, username, password, role } = req.body;
-
-  // Validate and create the user
+router.get('/get-password-settings', async (req, res) => {
   try {
-    let hashedPassword = password;
-
-    hashedPassword = await bcrypt.hash(hashedPassword, 10);
-
-    const newUser = new User({
-      firstName,
-      lastName,
-      username,
-      password: hashedPassword,
-      roles: role,
-      passModified: Date.now(),
-    });
-
-    await newUser.save();
-    res.status(200).json({ message: "User created successfully." });
+    const passwordSettings = await PasswordSettings.findOne();
+    if (passwordSettings) {
+      res.json(passwordSettings);
+    } else {
+      res.status(404).json({ error: 'Password settings not found' });
+    }
   } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ message: "An error occurred while creating the user." });
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while fetching the password settings' });
   }
 });
 
-router.post("/addRole/:userId", async (req, res) => {
-  const userId = req.params.userId;
-  const role = req.body.role;
+// Routes for updating password settings
+router.post('/update-password-settings', async (req, res) => {
+  var username;
+  const { requireCapital, requireLowercase, requireNumber, 
+    requireSpecial, minLength, maxLength, adminPassword } = req.body;
 
   try {
-    // Fetch the user from the database
-    const user = await User.findById(userId);
+    const token = req.session.token;
+    const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
+    username = decoded.username;
+    var user = await User.findOne({username});
+    const passwordMatch = await bcrypt.compare(adminPassword, user.password);
 
-    if (!user) {
-      res.status(404).json({ message: "User not found." });
-      return;
-    }
-
-    // Add the new role to the user's roles array, if it doesn't already exist
-    if (!user.roles.includes(role)) {
-      user.roles.push(role);
-    }
-
-    // Save the updated user
-    await user.save();
-    res.status(200).json({ message: "Role added successfully." });
-  } catch (error) {
-    console.error("Error adding role:", error);
-    res.status(500).json({ message: "An error occurred while adding the role." });
+  if (!passwordMatch) {
+    return res.status(401).json({ error: 'Invalid password.' });
   }
-});
+  } catch (error) {
+    console.error('Error with token:', error);
+    res.status(401).send('Invalid or expired token');
+    return;
+  }
 
-// Route for updating password settings
-router.post('/save-password-settings', async (req, res) => {
   try {
     // Save the password settings to the database 
-    const passwordSettings = new PasswordSettings(req.body);
+    const passwordSettings = new PasswordSettings({
+      requireCapital,
+      requireLowercase,
+      requireNumber,
+      requireSpecial,
+      minLength,
+      maxLength,
+    });
     await passwordSettings.save();
 
     res.status(200).json({ message: 'Password settings saved successfully.' });
@@ -227,58 +271,31 @@ router.post('/save-password-settings', async (req, res) => {
   }
 });
 
-// Helper function to apply the password settings
-async function applyPasswordSettings(password) {
-  // Retrieve the password settings from the database (you'll need to define the database model for this)
-  // Replace "PasswordSettings" with your database model name
-  const passwordSettings = await PasswordSettings.findOne();
-
-  let regexString = '^';
-
-  if (passwordSettings.requireCapital) {
-    regexString += '(?=.*[A-Z])';
-  }
-  if (passwordSettings.requireNonCapital) {
-    regexString += '(?=.*[a-z])';
-  }
-  if (passwordSettings.requireNumber) {
-    regexString += '(?=.*\\d)';
-  }
-  if (passwordSettings.requireSpecialChar) {
-    regexString += '(?=.*[@$!%?&])';
-  }
-
-  regexString += `[A-Za-z\\d@$!%?&]{${passwordSettings.minLength},${passwordSettings.maxLength}}$`;
-
-  return new RegExp(regexString).test(password);
-}
-
-
 // Change the password
 router.post('/change-password', async (req, res) => {
   const oldPassword = req.body.oldPassword;
   const newPassword = req.body.newPassword;
   const confirmNewPassword = req.body.confirmPassword;
-
+  const passwordSettings = await PasswordSettings.findOne();
 
   const token = req.session.token;
   const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
   const username = decoded.username;
 
-  let user;
-  user = await User.findOne({username});
+  let user = await User.findOne({username});
 
   const passwordMatch = await bcrypt.compare(oldPassword, user.password);
-  const specialChar = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$/;
   const isPasswordValid = await applyPasswordSettings(newPassword);
 
   console.log(newPassword)
 
-  if (!isPasswordValid) {
-    return res.status(400).json({ error: 'Le nouveau mot de passe doit contenir au moins 8 caractères, une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial.' });
-  }
   if (!passwordMatch) {
     return res.status(401).json({ error: 'Mot de passe incorrect.' });
+  }
+
+  if (!isPasswordValid) {
+    const passConfigErrMsg = await generatePassConfigMsg(passwordSettings);
+    return res.status(400).json({ error: passConfigErrMsg });
   }
 
   if (newPassword !== confirmNewPassword) {
@@ -296,7 +313,6 @@ router.post('/change-password', async (req, res) => {
   await user.save();
 
 });
-
 
 // Log out
 router.post('/logout', (req, res) => {

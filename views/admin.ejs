@@ -21,7 +21,7 @@
         <a class="nav-link active" data-toggle="tab" href="#configCon">Configuration de Connexion</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#configComm">Configuration de Complexité du mot de passe</a>
+        <a class="nav-link" id="configCompTab" data-toggle="tab" href="#configComp">Configuration de Complexité du mot de passe</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#configMod">Configuration de Modification de mot de passe</a>
@@ -34,7 +34,7 @@
         <h3>Configuration de Connexion</h3>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
       </div>
-      <div id="configComm" class="container tab-pane fade"><br>
+      <div id="configComp" class="container tab-pane fade"><br>
         <h3>Configuration de Complexité du mot de passe</h3>
         <form id="password-settings-form">
           <div>
@@ -45,9 +45,9 @@
             </label>
           </div>
           <div>
-            <label for="requireCapital">Require a non-capital letter</label>
+            <label for="requireLowercase">Require a non-capital letter</label>
             <label class="switch"> 
-            <input type="checkbox" id="requireNonCapital" name="requireNonCapital">
+            <input type="checkbox" id="requireLowercase" name="requireLowercase">
             <span class="slider round"></span>
             </label>
           </div>
@@ -59,9 +59,9 @@
             </label>
           </div>
           <div>
-            <label for="requireSpecialChar">Require a special character</label>
+            <label for="requireSpecial">Require a special character</label>
             <label class="switch"> 
-            <input type="checkbox" id="requireSpecialChar" name="requireSpecialChar">
+            <input type="checkbox" id="requireSpecial" name="requireSpecial">
             <span class="slider round"></span>
             </label>
           </div>
@@ -88,7 +88,7 @@
       </div>
     </div>
   </div>
-
+  <script src="admin.js"></script>
 <%- include('footer') %> <!-- Inclure le footer -->
 </body>
 </html>

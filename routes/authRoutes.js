@@ -233,19 +233,19 @@ router.get('/get-password-settings', async (req, res) => {
 // Routes for updating password settings
 router.post('/update-password-settings', async (req, res) => {
   var username;
-  const { requireCapital, requireLowercase, requireNumber, 
+  const { requireCapital, requireLowercase, requireNumber,
     requireSpecial, minLength, maxLength, adminPassword } = req.body;
 
   try {
     const token = req.session.token;
     const decoded = jwt.decode(token, process.env.ACCESS_TOKEN_SECRET);
     username = decoded.username;
-    var user = await User.findOne({username});
+    var user = await User.findOne({ username });
     const passwordMatch = await bcrypt.compare(adminPassword, user.password);
 
-  if (!passwordMatch) {
-    return res.status(401).json({ error: 'Invalid password.' });
-  }
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid password.' });
+    }
   } catch (error) {
     console.error('Error with token:', error);
     res.status(401).send('Invalid or expired token');
@@ -253,15 +253,30 @@ router.post('/update-password-settings', async (req, res) => {
   }
 
   try {
-    // Save the password settings to the database 
-    const passwordSettings = new PasswordSettings({
-      requireCapital,
-      requireLowercase,
-      requireNumber,
-      requireSpecial,
-      minLength,
-      maxLength,
-    });
+    // Check if password settings already exist
+    let passwordSettings = await PasswordSettings.findOne();
+
+    if (passwordSettings) {
+      // Update existing password settings
+      passwordSettings.requireCapital = requireCapital;
+      passwordSettings.requireLowercase = requireLowercase;
+      passwordSettings.requireNumber = requireNumber;
+      passwordSettings.requireSpecial = requireSpecial;
+      passwordSettings.minLength = minLength;
+      passwordSettings.maxLength = maxLength;
+    } else {
+      // Create new password settings if none exist
+      passwordSettings = new PasswordSettings({
+        requireCapital,
+        requireLowercase,
+        requireNumber,
+        requireSpecial,
+        minLength,
+        maxLength,
+      });
+    }
+
+    // Save the updated password settings
     await passwordSettings.save();
 
     res.status(200).json({ message: 'Password settings saved successfully.' });

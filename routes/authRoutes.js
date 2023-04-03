@@ -57,7 +57,7 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Too many attempts. Your account has been blocked.' });
     
     }else{
-
+      await User.updateOne({ username: req.body.username }, { $inc: { badConnexions: 1 } });
       return res.status(401).json({ message: 'Incorrect username or password.' });
     }
   }
@@ -80,7 +80,7 @@ router.post('/login', async (req, res) => {
 
   const date = new Date().getTime();
   const lastPassModifyDate = new Date(user.passModified).getTime();
-  const expireDate = lastPassModifyDate + (passwordSettings.expireAfterXMinutes * 60);
+  const expireDate = lastPassModifyDate + (passwordSettings.expireAfterXMinutes * 60 * 1000); // Expire date in milliseconds
 
   const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
   req.session.token = accessToken;

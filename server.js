@@ -1,8 +1,8 @@
 const express = require("express");
-const https = require("https");
-const fs = require("fs");
+const https = require("https");   //Added https
+const fs = require("fs"); //Added https
 const app = express();
-const PORT = 2000;
+const PORT = 5000;
 const AuthRoutes = require("./routes/authRoutes");
 const dotenv = require("dotenv");
 const ejs = require('ejs');
@@ -44,11 +44,13 @@ app.use(session({
   store: MongoStore.create({ mongoUrl: process.env.DB_CONNECTION_URI })
 }));
 
+ //Added https
 const options = {
   key: fs.readFileSync("./cert/CA/localhost/localhost.decrypted.key"),
   cert: fs.readFileSync("./cert/CA/localhost/localhost.crt"),
 };
 
+ //Added https
 https
   .createServer(options, app)
   .listen(PORT, () => console.log(`Running server on port: ${PORT}`));

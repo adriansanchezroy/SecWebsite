@@ -1,6 +1,12 @@
 const express = require("express");
+const fs = require('fs');
+const https = require('https');
 const app = express();
+<<<<<<< Updated upstream
 const PORT = 3000;
+=======
+const PORT = 2000;
+>>>>>>> Stashed changes
 const AuthRoutes = require("./routes/authRoutes");
 const dotenv = require("dotenv");
 const ejs = require('ejs');
@@ -8,6 +14,11 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 
 dotenv.config();
+
+const options = {
+  key: fs.readFileSync('./key.pem'),
+  cert: fs.readFileSync('./certificate.pem')
+};
 
 var corsOptions = {
     origin: "http://localhost:3000"
@@ -57,4 +68,13 @@ function checkRole(checkedRole) {
     };
 }
 
+<<<<<<< Updated upstream
 app.listen(PORT, () => console.log(`Running server on port: ${PORT}`));
+=======
+https.createServer(options, app).listen(PORT, () => {
+  console.log(`Running server on https://localhost:${PORT}`);
+});
+
+//app.use('/', login);
+//app.listen(PORT, () => console.log(`Running server on port: ${PORT}`));
+>>>>>>> Stashed changes

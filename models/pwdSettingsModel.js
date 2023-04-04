@@ -37,6 +37,10 @@ const passwordSettingsSchema = new mongoose.Schema({
     type: Number,
     default: 3,
 },
+  lockoutTime: {
+    type: Number,
+    default: 3,
+},
 });
 
 const PasswordSettings = mongoose.model('PasswordSettings', passwordSettingsSchema);

@@ -35,9 +35,10 @@ loginForm.addEventListener('submit', async (event) => {
       else {
         alert('Incorrect username or password');
         const jsonResponse = await response.json();
+        console.log(jsonResponse);
 
         // Show the wait message
-        submitMessage.innerText = 'Please wait 3 seconds before trying again.';
+        submitMessage.innerText = 'Please wait ' + jsonResponse.lockoutTime + ' seconds before trying again.';
         submitMessage.style.display = 'block';
 
         setTimeout(() => {

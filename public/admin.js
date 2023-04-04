@@ -1,8 +1,48 @@
 const passwordSettingsForm = document.getElementById('password-settings-form');
-const configCompTab = document.getElementById('configCompTab');
+const configComplexityTab = document.getElementById('configCompTab');
 const passwordSettingsFormModif = document.getElementById('password-settings-form-modifyPass');
+const configConnexionModif = document.getElementById('connexion-config-form');
 
-configCompTab.addEventListener('click', async () => {
+configConnexionModif.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  
+  const form = event.target;
+  const formData = new FormData(form);
+
+  const maxAttempts = formData.get('maxAttempts');
+  const timeBetweenAttempts = formData.get('timeBetweenAttempts');
+  const adminPassword = formData.get('adminPassConnexionModif');
+  console.log("Admin password: " + adminPassword);
+
+  const data = {
+    maxAttempts,
+    timeBetweenAttempts,
+    adminPassword,
+  };
+
+  try {
+    const response = await fetch('/update-connexion-config', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.status === 200) {
+      alert('Connexion configuration updated successfully');
+    } else {
+      const error = await response.text();
+      alert(error);
+    }
+  } catch (error) {
+    console.error('Error during connexion configuration update:', error);
+    alert('An error occurred during connexion configuration update');
+  }
+});
+
+
+configComplexityTab.addEventListener('click', async () => {
   try {
     const response = await fetch('/get-password-settings', {
       method: 'GET',
@@ -35,7 +75,6 @@ passwordSettingsForm.addEventListener('submit', async (event) => {
     const formData = new FormData(form);
   
     var requireCapital = formData.get('requireCapital') === "on";
-    console.log(requireCapital);
     var requireLowercase = formData.get('requireLowercase') === "on";
     var requireNumber = formData.get('requireNumber') === "on";
     var requireSpecial = formData.get('requireSpecial') === "on";
@@ -91,7 +130,7 @@ passwordSettingsForm.addEventListener('submit', async (event) => {
     };
   
     try {
-      const response = await fetch('/update-modify-password-settings', {
+      const response = await fetch('/update-password-modification-settings', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

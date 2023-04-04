@@ -32,18 +32,18 @@
     <div class="tab-content">
       <div id="configCon" class="container tab-pane active"><br>
         <h3>Configuration de Connexion</h3>
-        <form>
+        <form id="connexion-config-form">
           <div>
             <label for="tentAvantBlocked">Tentatives avant de bloquer le compte</label>
-            <input type="number" id="attemptsBlocked" name="attemptsBlocked">
+            <input type="number" id="maxAttempts" name="maxAttempts">
           </div>
           <div>
             <label for="tempBetweenTent">Temps entre les tentatives (secondes)</label>
             <input type="number" id="timeBetweenAttempts" name="timeBetweenAttempts">
           </div>
           <div>
-            <label for="adminPasswordForConnexionModif">Mot de passe (pour confirmation)</label>
-            <input type="password" id="adminPasswordForConnexionModif" name="adminPasswordConnexionModif" required>
+            <label for="adminPassConnexionModification">Mot de passe (pour confirmation)</label>
+            <input type="password" id="adminPassConnexionModif" name="adminPassConnexionModif" required>
           </div>
           <div>
             <button type="submit">Modifier</button>

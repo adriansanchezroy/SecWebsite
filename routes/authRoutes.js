@@ -39,7 +39,7 @@ router.post('/login', async (req, res) => {
   }
   if (!user) {
     await User.updateOne({ username: req.body.username }, { $inc: { badConnexions: 1 } });
-    return res.status(401).json({ message: 'Incorrect username or password.' });
+    return res.status(401).json({ message: 'Incorrect username or password.', lockoutTime: passwordSettings.lockoutTime  });
   }
   try {
     passwordSettings = await PasswordSettings.findOne();
@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
     
     }else{
       await User.updateOne({ username: req.body.username }, { $inc: { badConnexions: 1 } });
-      return res.status(401).json({ message: 'Incorrect username or password.' });
+      return res.status(401).json({ message: 'Incorrect username or password.', lockoutTime: passwordSettings.lockoutTime  });
     }
   }
 
@@ -309,7 +309,7 @@ router.post('/update-password-settings', async (req, res) => {
   }
 });
 
-router.post('/update-modify-password-settings', async (req, res) => {
+router.post('update-password-modification-settings', async (req, res) => {
   var username;
   const { differentFromXLastPwd, expireAfterXMinutes, adminPassword } = req.body;
 
@@ -375,17 +375,17 @@ router.post('/update-connexion-config', async (req, res) => {
 
     if (passwordSettings) {
       // Update existing password settings
-      passwordSettings.differentFromXLastPwd = differentFromXLastPwd;
-      passwordSettings.expireAfterXMinutes = expireAfterXMinutes;
+      passwordSettings.maxAttempts = maxAttempts;
+      passwordSettings.lockoutTime = timeBetweenAttempts;
 
     } 
     // Save the updated password settings
     await passwordSettings.save();
 
-    res.status(200).json({ message: 'Password modification settings saved successfully.' });
+    res.status(200).json({ message: 'Connexion configuration saved successfully.' });
   } catch (error) {
-    console.error('Error saving password modification settings:', error);
-    res.status(500).json({ message: 'An error occurred while saving the password modification settings.' });
+    console.error('Error saving connexion configuration:', error);
+    res.status(500).json({ message: 'An error occurred while saving the connexion configuration.' });
   }
 });
 

@@ -3,7 +3,6 @@ const fs = require('fs');
 const https = require('https');
 const app = express();
 <<<<<<< Updated upstream
-const PORT = 3000;
 =======
 const PORT = 2000;
 >>>>>>> Stashed changes

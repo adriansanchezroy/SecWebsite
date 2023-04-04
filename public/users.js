@@ -59,8 +59,8 @@ addUserForm.addEventListener("submit", async (event) => {
           // Refresh the users list
           window.location.reload();
         } else {
-          const error = await response.json();
-          alert(error.message);
+          const error = await response.text();
+          alert(error);
         }
       } catch (error) {
         console.error("Error creating user:", error);

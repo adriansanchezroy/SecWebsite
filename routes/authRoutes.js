@@ -128,6 +128,13 @@ router.get('/users', authenticateToken, async (req, res) => {
 // Add a new user to the database
 router.post("/addUser", authenticateToken, async (req, res) => {
   const { firstName, lastName, username, password, role } = req.body;
+  const passwordSettings = await PasswordSettings.findOne();
+  const isPasswordValid = await applyPasswordSettings(password);
+
+  if (!isPasswordValid) {
+    const passConfigErrMsg = await generatePassConfigMsg(passwordSettings);
+    return res.status(400).json({ error: passConfigErrMsg });
+  }
 
   // Validate and create the user
   try {

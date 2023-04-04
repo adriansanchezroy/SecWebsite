@@ -187,7 +187,7 @@ router.post("/addRole/:userId", async (req, res) => {
 });
 
 // Get the users from the database and render the users page
-router.get('/clients/business', authenticateToken, async (req, res) => {
+router.get('/business', authenticateToken, async (req, res) => {
   try {
    //Permet le blocage si le role n est pas admin ou business
     const token = req.session.token;
@@ -207,7 +207,7 @@ router.get('/clients/business', authenticateToken, async (req, res) => {
 });
 
 // Get the users from the database and render the users page
-router.get('/clients/residential', authenticateToken, async (req, res) => {
+router.get('/residential', authenticateToken, async (req, res) => {
   try {
   //Permet le blocage si le role n est pas admin ou residentiel
     const token = req.session.token;

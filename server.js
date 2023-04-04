@@ -50,10 +50,12 @@ const options = {
   cert: fs.readFileSync("./cert/CA/localhost/localhost.crt"),
 };
 
+app.use('/', login);
+
  //Added https
 https
   .createServer(options, app)
   .listen(PORT, () => console.log(`Running server on port: ${PORT}`));
 
-//app.use('/', login);
+
 //app.listen(PORT, () => console.log(`Running server on port: ${PORT}`));

@@ -84,7 +84,7 @@ router.post('/login', async (req, res) => {
 
   const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
   req.session.token = accessToken;
-  await User.updateOne({ username: req.body.username }, { $set: { badConnexions: 0 } });
+  await User.updateOne({ username: req.body.username }, { $set: { badConnexions: 0 } }); // Reset bad connexions counter
 
   if(date >= expireDate){
     return res.status(203).json({ message: 'You need to modify your password', accessToken: accessToken });

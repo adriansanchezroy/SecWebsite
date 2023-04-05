@@ -5,7 +5,6 @@
   <title>Utilisateurs</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
 </head>
 
 <body>
@@ -22,10 +21,14 @@
   <button type="button" id="openAddUserModal">Créer Utilisateur</button>
 
   <!-- Add User Modal -->
+
 <div id="addUserModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
   </div>
+  <br>
+
+  <div class="form-popup">
     <form id="addUserForm" action="/addUser" method="POST">
       <h2>Add User</h2>
       <label for="firstName">First Name:</label>
@@ -46,6 +49,7 @@
       </select><br>
       <button type="submit">Create User</button>
     </form>
+  </div>
 </div>
 <br>
 

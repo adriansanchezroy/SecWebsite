@@ -53,9 +53,9 @@ const options = {
 app.use('/', login);
 
  //Added https
-https
-  .createServer(options, app)
-  .listen(PORT, () => console.log(`Running server on port: ${PORT}`));
+// https
+//   .createServer(options, app)
+//   .listen(PORT, () => console.log(`Running server on port: ${PORT}`));
 
 
-//app.listen(PORT, () => console.log(`Running server on port: ${PORT}`));
+app.listen(PORT, () => console.log(`Running server on port: ${PORT}`));

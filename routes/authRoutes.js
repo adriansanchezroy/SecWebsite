@@ -186,6 +186,32 @@ router.post("/addRole/:userId", async (req, res) => {
   }
 });
 
+router.post("/blockUser/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    // Fetch the user from the database
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+      return;
+    }
+
+    if(user.blocked){
+      user.blocked = false;
+    }else{
+      user.blocked = true;
+    }
+
+    // Save the updated user
+    await user.save();
+    res.status(200).json({ message: "User blocked/unblocked successfully." });
+  } catch (error) {
+    console.error("Error blocking user:", error);
+    res.status(500).json({ message: "An error occurred while blocking the user." });
+  }
+});
+
 // Get the users from the database and render the users page
 router.get('/business', authenticateToken, async (req, res) => {
   try {
@@ -316,7 +342,7 @@ router.post('/update-password-settings', async (req, res) => {
   }
 });
 
-router.post('update-password-modification-settings', async (req, res) => {
+router.post('/update-password-modification-settings', async (req, res) => {
   var username;
   const { differentFromXLastPwd, expireAfterXMinutes, adminPassword } = req.body;
 

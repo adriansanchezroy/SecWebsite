@@ -86,9 +86,10 @@
             <div class="btn-group">
               <button class="dropbtn dropdown-toggle" data-toggle="dropdown">Actions</button>
               <div class="dropdown-menu">
-                <a class="dropdown-item" id= "addRole" href="#" data-userid="<%= user._id %>" data-role="admin">Ajouter rôle admin</a>
-                <a class="dropdown-item" id= "addRole" href="#" data-userid="<%= user._id %>" data-role="residential">Ajouter rôle résidentiel</a>
-                <a class="dropdown-item" id= "addRole" href="#" data-userid="<%= user._id %>" data-role="business">Ajouter rôle affaire</a>
+                <a class="dropdown-item" name="addRoles" id= "addRole" href="#" data-userid="<%= user._id %>" data-role="admin">Ajouter rôle admin</a>
+                <a class="dropdown-item" name="addRoles" id= "addRole" href="#" data-userid="<%= user._id %>" data-role="residential">Ajouter rôle résidentiel</a>
+                <a class="dropdown-item" name="addRoles" id= "addRole" href="#" data-userid="<%= user._id %>" data-role="business">Ajouter rôle affaire</a>
+                <a class="dropdown-item-block" id= "blockUser" href="#" data-userid="<%= user._id %>" data-role="block">Block/Unblock</a>
               </div>
             </div>
           </td>

@@ -5,6 +5,7 @@ const closeAddUserModalBtn = document.querySelector(".close");
 const addUserForm = document.getElementById("addUserForm");
 
 const addRoleButtons = document.querySelectorAll(".dropdown-item");
+const blockUserButton = document.querySelectorAll(".dropdown-item-block");
 
 // Open the modal when the open modal button is clicked
 openAddUserModalBtn.onclick = () => {
@@ -92,3 +93,29 @@ addRoleButtons.forEach((button) => {
     }
   });
 });    
+
+
+blockUserButton.forEach((button) => {
+  button.addEventListener("click", async (event) => {
+    event.preventDefault();
+    const userId = event.target.dataset.userid;
+    try {
+      const response = await fetch(`/blockUser/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      if (response.ok) {
+        alert("User blocked/unblocked successfully.");
+        window.location.reload();
+      } else {
+        const error = await response.json();
+        alert(error.message);
+      }
+    } catch (error) {
+      console.error("Error blocking user:", error);
+    }
+  });
+});   

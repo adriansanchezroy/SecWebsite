@@ -1,6 +1,10 @@
 const PasswordSettings = require('../models/pwdSettingsModel');
 
-// Helper function to apply the password settings
+/**
+@description Applique les paramètres de configuration du mot de passe pour valider un mot de passe.
+@param {string} password - Le mot de passe à valider.
+@returns {boolean} - True si le mot de passe respecte les paramètres de configuration, false sinon.
+*/
 async function applyPasswordSettings(password) {
     // Retrieve the password settings from the database
     const passwordSettings = await PasswordSettings.findOne();

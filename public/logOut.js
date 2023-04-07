@@ -1,5 +1,10 @@
 const logoutButton = document.getElementById('logout-form');
 
+/**
+@description Fonction qui gère la déconnexion d'un utilisateur en envoyant une requête POST au serveur.
+@throws {Error} Une erreur est lancée si la déconnexion échoue.
+@returns {void} 
+*/
 logoutButton.addEventListener('click', async () => {
   try {
     const response = await fetch('/logout', {

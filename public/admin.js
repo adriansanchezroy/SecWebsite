@@ -3,6 +3,11 @@ const configComplexityTab = document.getElementById('configCompTab');
 const passwordSettingsFormModif = document.getElementById('password-settings-form-modifyPass');
 const configConnexionModif = document.getElementById('connexion-config-form');
 
+/**
+@description Fonction qui gère la soumission du formulaire de modification de la configuration de connexion
+@param {Object} event - Événement de soumission de formulaire
+@returns {Promise<void>} - Une promesse qui ne renvoie aucune valeur
+*/
 configConnexionModif.addEventListener('submit', async (event) => {
   event.preventDefault();
   
@@ -41,7 +46,11 @@ configConnexionModif.addEventListener('submit', async (event) => {
   }
 });
 
-
+/**
+@description Fonction qui permet de configurer les options de complexité du mot de passe
+@param {Event} event - L'événement qui déclenche la fonction (clic sur un élément du DOM)
+@returns {void} - Une promesse qui ne renvoie aucune valeur
+*/
 configComplexityTab.addEventListener('click', async () => {
   try {
     const response = await fetch('/get-password-settings', {
@@ -68,6 +77,12 @@ configComplexityTab.addEventListener('click', async () => {
   }
 });
 
+/**
+@description Cette méthode gère la soumission du formulaire de paramètres de mot de passe.
+@param {event} event - L'événement de soumission du formulaire.
+@returns {void}
+@throws {Error} Lance une erreur si une erreur survient lors de la mise à jour des paramètres de mot de passe.
+*/
 passwordSettingsForm.addEventListener('submit', async (event) => {
     event.preventDefault();
   
@@ -113,6 +128,12 @@ passwordSettingsForm.addEventListener('submit', async (event) => {
     }
   });
 
+/**
+@description Gère la soumission du formulaire de modification des paramètres de mot de passe. Récupère les données du formulaire, envoie une requête POST au serveur avec les données et gère la réponse.
+@param {Event} event - L'événement de soumission du formulaire
+@returns {void} 
+@throws {Error} Lance une erreur si une erreur survient lors de la mise à jour des paramètres de mot de passe.
+*/
   passwordSettingsFormModif.addEventListener('submit', async (event) => {
     event.preventDefault();
   

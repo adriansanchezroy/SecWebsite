@@ -11,17 +11,32 @@ const generatePassConfigMsg = require('../utils/generatePassConfigMsg');
 const PasswordSettings = require('../models/pwdSettingsModel');
 
 
-// Get the login page and render it
+/**
+@description Affiche la page de connexion.
+@param {object} req - Objet de requête HTTP.
+@param {object} res - Objet de réponse HTTP.
+@returns {void}
+*/
 router.get('/login', (req, res) => {
     res.render('login');
   });
 
-// Get the dashboard page and render it
+/**
+@description Affiche le tableau de bord de l'utilisateur connecté.
+@param {object} req - Objet de requête HTTP.
+@param {object} res - Objet de réponse HTTP.
+@returns {void}
+*/
 router.get('/dashboard',authenticateToken, (req, res) => {
   res.render('dashboard');
 });
 
-// Get the force password modification page and render it
+/**
+@description Affiche la page de modification de mot de passe forcé.
+@param {object} req - Objet de requête HTTP.
+@param {object} res - Objet de réponse HTTP.
+@returns {void}
+*/
 router.get('/force-modify-password', (req, res) => {
   res.render('forceModifyPass');
 });
@@ -94,6 +109,12 @@ router.post('/login', async (req, res) => {
 });
 
 // Get the users from the database and render the users page
+/**
+@description Affiche la page users en vérifiant bien à l'aide du token d'authentification que l'utilisateur actuel a le bon rôle 
+@param {Object} req - L'objet requête http.
+@param {Object} res - L'objet réponse http.
+@return {void} - Donne les accès
+*/
 router.get('/users', authenticateToken, async (req, res) => {
   var username;
   var roles;
@@ -126,6 +147,12 @@ router.get('/users', authenticateToken, async (req, res) => {
 });
 
 // Add a new user to the database
+/**
+Ajoute un nouvel utilisateur avec les informations fournies dans le corps de la requête
+@param {Object} req - L'objet requête http contenant les informations de l'utilisateur à ajouter
+@param {Object} res - L'objet réponse http.
+@returns {void} - Si la validation de mot de passe échoue, une réponse HTTP avec un message d'erreur est envoyé. Sinon, l'utilisateur est ajouté à la base de données et une réponse HTTP 200 OK est renvoyée
+*/
 router.post("/addUser", authenticateToken, async (req, res) => {
   const { firstName, lastName, username, password, role } = req.body;
   const passwordSettings = await PasswordSettings.findOne();
@@ -159,6 +186,13 @@ router.post("/addUser", authenticateToken, async (req, res) => {
   }
 });
 
+/**
+Ajoute un rôle à l'utilisateur spécifié.
+@param {string} userId - L'ID de l'utilisateur auquel ajouter le rôle.
+@param {string} role - Le nouveau rôle à ajouter.
+@returns {void} - Affiche un message confirmant que le rôle a été ajouté avec succès.
+@throws {error} - Affiche un message d'erreur si une erreur s'est produite lors de l'ajout du rôle.
+*/
 router.post("/addRole/:userId", async (req, res) => {
   const userId = req.params.userId;
   const role = req.body.role;
@@ -472,7 +506,7 @@ router.post('/change-password', async (req, res) => {
   res.status(200).json({ message: 'Password modified successfully.' });
 });
 
-// Log out
+// Log out avec clear des cookies + redirect vers la page de login
 router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {

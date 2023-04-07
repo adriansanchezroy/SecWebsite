@@ -23,7 +23,14 @@ window.onclick = (event) => {
   }
 };
 
-// Add user form submission
+
+/**
+@description Cette fonction est appelée lorsqu'un formulaire d'ajout d'utilisateur est soumis. 
+            Elle récupère les informations du formulaire et effectue une requête API pour créer un nouvel utilisateur. 
+            Si la création est réussie, un message de confirmation est affiché et la liste des utilisateurs est rafraîchie.
+@param {object} event - L'événement soumis lors de la soumission du formulaire
+@returns {void} Retourne une promesse résolue une fois que l'utilisateur a été créé avec succés, ou rejettée avec une erreur si le processus a échoué.
+*/
 addUserForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
@@ -68,6 +75,14 @@ addUserForm.addEventListener("submit", async (event) => {
       }
     });
 
+
+
+
+/**
+@description Ajoute un rôle à un utilisateur lorsqu'un bouton est cliqué.
+@param {Object} button - Le bouton cliqué qui déclenche la fonction.
+@returns {void} - Retourne une promesse résolue une fois que le rôle a été ajouté avec succès, ou rejettée avec une erreur si le processus a échoué.
+*/
 addRoleButtons.forEach((button) => {
   button.addEventListener("click", async (event) => {
     event.preventDefault();
@@ -94,7 +109,11 @@ addRoleButtons.forEach((button) => {
   });
 });    
 
-
+/**
+@description Fonction qui gère le blocage/déblocage d'un utilisateur en cliquant sur le bouton correspondant
+@param {Object} button - Le bouton cliqué qui déclenche la fonction.
+@returns {void} - Retourne une promesse résolue une fois que l'utilisateur est bloqué ou débloqué, ou rejettée avec une erreur si le processus a échoué.
+*/
 blockUserButton.forEach((button) => {
   button.addEventListener("click", async (event) => {
     event.preventDefault();

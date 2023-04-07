@@ -1,6 +1,11 @@
 const loginForm = document.getElementById('login');
 const submitButton = loginForm.querySelector('button[type="submit"]');
 
+/**
+@description Fonction pour soumettre les informations de connexion et effectuer une requête POST pour l'authentification.
+@param {Event} event - L'événement de soumission du formulaire de connexion.
+@returns {void}
+*/
 loginForm.addEventListener('submit', async (event) => {
     event.preventDefault();
     // Disable the submit button to prevent repeated login attempts

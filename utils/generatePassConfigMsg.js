@@ -1,4 +1,10 @@
 // Helper function to generate the password settings message
+
+/**
+@description Génère un message de configuration de mot de passe à partir des paramètres de configuration de mot de passe
+@param {Object} passwordSettings - Les paramètres de configuration de mot de passe
+@returns {string} - Le message de configuration de mot de passe généré
+*/
 async function generatePassConfigMsg(passwordSettings) {
     let passwordSettingsMsg = 'The password must ';
 

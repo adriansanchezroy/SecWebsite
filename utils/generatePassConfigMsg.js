@@ -1,3 +1,13 @@
+/**
+ * Cette classe fait partie du projet GTI619 - Équipe B.
+ * 
+ * Cette classe génère le message de complexité de mot de passe requis
+ * 
+ * Copyright (c) 2023 Duong Kevin, Adrian Sanchez Roy, Ines Abdelkefi, Corentin Seguin.
+ * Tous droits réservés.
+ */
+
+
 // Helper function to generate the password settings message
 
 /**

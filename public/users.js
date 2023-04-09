@@ -1,3 +1,9 @@
+/**
+ * Cette classe fait partie du projet GTI619 - Équipe B.
+ * Copyright (c) 2023 Duong Kevin, Adrian Sanchez Roy, Ines Abdelkefi, Corentin Seguin.
+ * Tous droits réservés.
+ */
+
 // Get the modal, open modal button, and close button
 const addUserModal = document.getElementById("addUserModal");
 const openAddUserModalBtn = document.getElementById("openAddUserModal");

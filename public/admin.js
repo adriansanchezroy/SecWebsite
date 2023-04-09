@@ -1,3 +1,9 @@
+/**
+ * Cette classe fait partie du projet GTI619 - Équipe B.
+ * Copyright (c) 2023 Duong Kevin, Adrian Sanchez Roy, Ines Abdelkefi, Corentin Seguin.
+ * Tous droits réservés.
+ */
+
 const passwordSettingsForm = document.getElementById('password-settings-form');
 const configComplexityTab = document.getElementById('configCompTab');
 const passwordSettingsFormModif = document.getElementById('password-settings-form-modifyPass');

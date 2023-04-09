@@ -1,3 +1,13 @@
+/**
+ * Cette classe fait partie du projet GTI619 - Équipe B.
+ * 
+ * Cette classe génère la complexité de mot de passe
+ * 
+ * Copyright (c) 2023 Duong Kevin, Adrian Sanchez Roy, Ines Abdelkefi, Corentin Seguin.
+ * Tous droits réservés.
+ */
+
+
 const PasswordSettings = require('../models/pwdSettingsModel');
 
 /**

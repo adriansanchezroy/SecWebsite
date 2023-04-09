@@ -1,3 +1,13 @@
+/**
+ * Cette classe fait partie du projet GTI619 - Équipe B.
+ * 
+ * Cette classe gère toutes les pages du projet.
+ * 
+ * Copyright (c) 2023 Duong Kevin, Adrian Sanchez Roy, Ines Abdelkefi, Corentin Seguin.
+ * Tous droits réservés.
+ */
+
+
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
@@ -42,6 +52,13 @@ router.get('/force-modify-password', (req, res) => {
 });
 
 // Post the login form and authenticate the user
+/**
+@description Cette fonction gère la requête POST pour la page Login.
+@param {Object} req - L'objet représentant la requête HTTP.
+@param {Object} res - L'objet représentant la réponse HTTP.
+@returns {Object} L'objet représentant la réponse HTTP avec un éventuel message d'erreur.
+@throws {Error} Affiche un message d'erreur si les paramètres de sécurité ne sont pas respectés (bon identifiant, bon mot de passe, compte non bloqué, etc).
+*/
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   let user;
@@ -110,10 +127,13 @@ router.post('/login', async (req, res) => {
 
 // Get the users from the database and render the users page
 /**
-@description Affiche la page users en vérifiant bien à l'aide du token d'authentification que l'utilisateur actuel a le bon rôle 
+@description Affiche la page Utilisateurs en vérifiant bien à l'aide du token d'authentification que l'utilisateur actuel a le bon rôle.
 @param {Object} req - L'objet requête http.
 @param {Object} res - L'objet réponse http.
-@return {void} - Donne les accès
+@return {void} - Donne les accès.
+@throws {error} - Affiche un message d'erreur si l'utilisateur n'est pas dans la base de données.
+@throws {error} - Affiche un message d'erreur si l'utilisateur n'a pas le bon rôle.
+@throws {error} - Affiche un message d'erreur si le token a expiré ou est invalide.
 */
 router.get('/users', authenticateToken, async (req, res) => {
   var username;
@@ -148,10 +168,12 @@ router.get('/users', authenticateToken, async (req, res) => {
 
 // Add a new user to the database
 /**
-Ajoute un nouvel utilisateur avec les informations fournies dans le corps de la requête
-@param {Object} req - L'objet requête http contenant les informations de l'utilisateur à ajouter
+@description Ajoute un nouvel utilisateur avec les informations fournies dans le corps de la requête.
+@param {Object} req - L'objet requête http contenant les informations de l'utilisateur à ajouter.
 @param {Object} res - L'objet réponse http.
-@returns {void} - Si la validation de mot de passe échoue, une réponse HTTP avec un message d'erreur est envoyé. Sinon, l'utilisateur est ajouté à la base de données et une réponse HTTP 200 OK est renvoyée
+@returns {void} - Affiche un message confirmant la création de l'utilisateur.
+@returns {void} - Si la validation de mot de passe échoue, un message d'erreur est envoyé.
+@throws {error} - Affiche un message d'erreur si une erreur s'est produite lors de la création d'un utilisateur.
 */
 router.post("/addUser", authenticateToken, async (req, res) => {
   const { firstName, lastName, username, password, role } = req.body;
@@ -187,10 +209,11 @@ router.post("/addUser", authenticateToken, async (req, res) => {
 });
 
 /**
-Ajoute un rôle à l'utilisateur spécifié.
+@description Ajoute un rôle à l'utilisateur spécifié.
 @param {string} userId - L'ID de l'utilisateur auquel ajouter le rôle.
 @param {string} role - Le nouveau rôle à ajouter.
 @returns {void} - Affiche un message confirmant que le rôle a été ajouté avec succès.
+@returns {void} - Si l'utilisateur n'est pas retrouvé dans la database, un message d'erreur est envoyé.
 @throws {error} - Affiche un message d'erreur si une erreur s'est produite lors de l'ajout du rôle.
 */
 router.post("/addRole/:userId", async (req, res) => {
@@ -220,6 +243,13 @@ router.post("/addRole/:userId", async (req, res) => {
   }
 });
 
+/**
+@description Bloque ou débloque un utilisateur spécifique.
+@param {string} userId - L'ID de l'utilisateur auquel ajouter le rôle.
+@returns {void} - Affiche un message confirmant que l'utiliateur a été bloqué ou débloqué avec succès.
+@returns {void} - Si l'utilisateur n'est pas retrouvé dans la database, un message d'erreur est envoyé.
+@throws {error} - Affiche un message d'erreur si une erreur s'est produite lors du blocage/déblocage de l'utilisateur.
+*/
 router.post("/blockUser/:userId", async (req, res) => {
   const userId = req.params.userId;
   try {
@@ -247,6 +277,14 @@ router.post("/blockUser/:userId", async (req, res) => {
 });
 
 // Get the users from the database and render the users page
+/**
+@description Affiche la page Clients Affaires en vérifiant bien à l'aide du token d'authentification que l'utilisateur actuel a le bon rôle.
+@param {Object} req - L'objet requête http.
+@param {Object} res - L'objet réponse http.
+@return {void} - Donne les accès.
+@returns {void} - Si l'utilisateur n'a pas le bon rôle, un message d'erreur est envoyé.
+@throws {error} - Affiche un message d'erreur si l'utilisateur n'est pas dans la base de données.
+*/
 router.get('/business', authenticateToken, async (req, res) => {
   try {
    //Permet le blocage si le role n est pas admin ou business
@@ -267,6 +305,14 @@ router.get('/business', authenticateToken, async (req, res) => {
 });
 
 // Get the users from the database and render the users page
+/**
+@description Affiche la page Clients Résidentiels en vérifiant bien à l'aide du token d'authentification que l'utilisateur actuel a le bon rôle.
+@param {Object} req - L'objet requête http.
+@param {Object} res - L'objet réponse http.
+@return {void} - Donne les accès.
+@returns {void} - Si l'utilisateur n'a pas le bon rôle, un message d'erreur est envoyé.
+@throws {error} - Affiche un message d'erreur si l'utilisateur n'est pas dans la base de données.
+*/
 router.get('/residential', authenticateToken, async (req, res) => {
   try {
   //Permet le blocage si le role n est pas admin ou residentiel
@@ -287,6 +333,14 @@ router.get('/residential', authenticateToken, async (req, res) => {
 });
 
 // Get the users from the database and render the users page
+/**
+@description Affiche la page Administration en vérifiant bien à l'aide du token d'authentification que l'utilisateur actuel a le bon rôle.
+@param {Object} req - L'objet requête http.
+@param {Object} res - L'objet réponse http.
+@return {void} - Donne les accès.
+@returns {void} - Si l'utilisateur n'a pas le bon rôle, un message d'erreur est envoyé.
+@throws {error} - Affiche un message d'erreur si l'utilisateur n'est pas dans la base de données.
+*/
 router.get('/admin', authenticateToken, async (req, res) => {
   try {
    //Permet le blocage si le role n est pas admin
@@ -306,6 +360,13 @@ router.get('/admin', authenticateToken, async (req, res) => {
   }
 });
 
+/**
+@description Récupère les paramètres de mot de passe actuels de l'application
+@param {Object} req - L'objet requête express
+@param {Object} res - L'objet réponse express
+@returns {Object} - Les paramètres de mot de passe actuels
+@throws {error} - Affiche un message d'erreur s'il y a un problème lors de la récupération des paramètres.
+*/
 router.get('/get-password-settings', async (req, res) => {
   try {
     const passwordSettings = await PasswordSettings.findOne();
@@ -321,6 +382,14 @@ router.get('/get-password-settings', async (req, res) => {
 });
 
 // Routes for updating password settings
+/**
+@description Cette fonction gère la requête POST pour mettre à jour les paramètres de modification du mot de passe.
+@param {Object} req - L'objet requête http.
+@param {Object} res - L'objet réponse http.
+@returns {Object} - La réponse HTTP contenant le résultat de l'opération ou une erreur.
+@returns {void} - Si la validation de mot de passe échoue, un message d'erreur est envoyé.
+@throws {Error} - Affiche un message d'erreur si le jeton est invalide ou expiré
+*/
 router.post('/update-password-settings', async (req, res) => {
   var username;
   const { requireCapital, requireLowercase, requireNumber,
@@ -376,6 +445,13 @@ router.post('/update-password-settings', async (req, res) => {
   }
 });
 
+/**
+@description Cette fonction gère la requête POST pour mettre à jour les paramètres de modification du mot de passe.
+@param {Object} req - L'objet requête http.
+@param {Object} res - L'objet réponse http.
+@returns {Void} - Renvoie un objet JSON contenant un message de confirmation ou une erreur.
+@throws {Error} - Affiche un message d'erreur si la validation du mot de passe administrateur a échoué.
+*/
 router.post('/update-password-modification-settings', async (req, res) => {
   var username;
   const { differentFromXLastPwd, expireAfterXMinutes, adminPassword } = req.body;
@@ -416,6 +492,13 @@ router.post('/update-password-modification-settings', async (req, res) => {
   }
 });
 
+/**
+@description Cette fonction gère la requête POST pour mettre à jour la configuration de connexion.
+@param {Object} req - L'objet représentant la requête HTTP.
+@param {Object} res - L'objet représentant la réponse HTTP.
+@returns {Object} L'objet représentant la réponse HTTP avec un éventuel message d'erreur.
+@throws {Error} Affiche un message d'erreur si le token est invalide ou a expiré.
+*/
 router.post('/update-connexion-config', async (req, res) => {
   var username;
   const { maxAttempts, timeBetweenAttempts, adminPassword } = req.body;
@@ -458,6 +541,13 @@ router.post('/update-connexion-config', async (req, res) => {
 
 
 // Change the password route
+/**
+@description Cette fonction gère la requête POST pour mettre à jour le mot de passe.
+@param {Object} req - L'objet représentant la requête HTTP.
+@param {Object} res - L'objet représentant la réponse HTTP.
+@returns {Object} L'objet représentant la réponse HTTP avec un éventuel message d'erreur.
+@throws {Error} Affiche un message d'erreur si le mot de passe ne correspond ou s'il ne repond pas aux paramètres en place.
+*/
 router.post('/change-password', async (req, res) => {
   const oldPassword = req.body.oldPassword;
   const newPassword = req.body.newPassword;
@@ -507,6 +597,12 @@ router.post('/change-password', async (req, res) => {
 });
 
 // Log out avec clear des cookies + redirect vers la page de login
+/**
+@description Cette fonction gère la requête POST pour renvoyer sur la page Login après une déconnexion.
+@param {Object} req - L'objet représentant la requête HTTP.
+@param {Object} res - L'objet représentant la réponse HTTP.
+@throws {Error} Affiche un message d'erreur si un problème survient lors de la déconnexion.
+*/
 router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {

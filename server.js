@@ -1,3 +1,13 @@
+/**
+ * Cette classe fait partie du projet GTI619 - Équipe B.
+ * 
+ * Cette classe gère la connexion au localhsot et a la base de donnée
+ * 
+ * Copyright (c) 2023 Duong Kevin, Adrian Sanchez Roy, Ines Abdelkefi, Corentin Seguin.
+ * Tous droits réservés.
+ */
+
+
 const express = require("express");
 const https = require("https");   //Added https
 const fs = require("fs"); //Added https

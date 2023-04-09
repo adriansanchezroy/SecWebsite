@@ -1,3 +1,9 @@
+/**
+ * Cette classe fait partie du projet GTI619 - Équipe B.
+ * Copyright (c) 2023 Duong Kevin, Adrian Sanchez Roy, Ines Abdelkefi, Corentin Seguin.
+ * Tous droits réservés.
+ */
+
 const loginForm = document.getElementById('login');
 const submitButton = loginForm.querySelector('button[type="submit"]');
 

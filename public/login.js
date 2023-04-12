@@ -48,7 +48,6 @@ loginForm.addEventListener('submit', async (event) => {
         const jsonResponse = await response.json();
         console.log(jsonResponse);
 
-        // Show the wait message
         submitMessage.innerText = 'Please wait ' + jsonResponse.lockoutTime + ' seconds before trying again.';
         submitMessage.style.display = 'block';
 
@@ -56,7 +55,7 @@ loginForm.addEventListener('submit', async (event) => {
           submitButton.disabled = false;
           submitMessage.innerText = '';
           submitMessage.style.display = 'none';
-        }, 3000);
+        }, jsonResponse.lockoutTime);
       }
     } catch (error) {
       console.error('Error during login:', error);

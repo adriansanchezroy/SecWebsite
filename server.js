@@ -58,14 +58,14 @@ app.use(session({
 app.use('/', login);
 
  //Added https
-const options = {
-  key: fs.readFileSync("./cert/CA/localhost/localhost.decrypted.key"),
-  cert: fs.readFileSync("./cert/CA/localhost/localhost.crt"),
-};
+// const options = {
+//   key: fs.readFileSync("./cert/CA/localhost/localhost.decrypted.key"),
+//   cert: fs.readFileSync("./cert/CA/localhost/localhost.crt"),
+// };
 
-https
-  .createServer(options, app)
-  .listen(PORT, () => console.log(`Running server on port: ${PORT}`));
+// https
+//   .createServer(options, app)
+//   .listen(PORT, () => console.log(`Running server on port: ${PORT}`));
 
 // For no https, uncomment the following line and comment out the above lines after the Added https comment
-//app.listen(PORT, () => console.log(`Running server on port: ${PORT}`));
+app.listen(PORT, () => console.log(`Running server on port: ${PORT}`));

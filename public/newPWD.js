@@ -6,6 +6,10 @@
 
 const changePasswordForm = document.getElementById('change-password-form');
 
+/**
+ * Gestionnaire d'événements pour le formulaire de changement de mot de passe.
+ * @param {Event} event - L'événement déclenché par la soumission du formulaire.
+ */
 changePasswordForm.addEventListener('submit', async (event) => {
   event.preventDefault();
 

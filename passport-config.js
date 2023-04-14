@@ -1,3 +1,11 @@
+/**
+ * Cette classe fait partie du projet GTI619 - Équipe B.
+ * 
+ * 
+ * Copyright (c) 2023 Duong Kevin, Adrian Sanchez Roy, Ines Abdelkefi, Corentin Seguin.
+ * Tous droits réservés.
+ */
+
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('./models/userModel');

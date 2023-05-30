@@ -1,5 +1,3 @@
-# GTI619-Labo5
-
 Afin d'exécuter le code, suivez les instructions suivantes:
 1. Ouvrir un terminal.
 2. Changer de dossier jusqu'à se rendre au dossier contenant le code.
